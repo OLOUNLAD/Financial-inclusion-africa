@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Rapport de Projet – Science des Données</title>
+<style>
+  @page {
+    size: A4;
+    margin: 2.5cm;
+    @bottom-center {
+      content: counter(page);
+    }
+  }
+  body {
+    font-family: "Times New Roman", Times, Georgia, serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #111111;
+    text-align: justify;
+    margin: 0;
+    padding: 0;
+  }
+  .title-page {
+    text-align: center;
+    page-break-after: always;
+    padding-top: 1.5cm;
+  }
+  .institution {
+    font-size: 13pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4cm;
+  }
+  .module {
+    font-size: 11pt;
+    font-style: italic;
+    color: #444444;
+    margin-bottom: 1.8cm;
+  }
+  .main-title {
+    font-size: 17pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 0.5cm;
+    line-height: 1.3;
+  }
+  .subtitle {
+    font-size: 12pt;
+    font-style: italic;
+    color: #333333;
+    margin-bottom: 2cm;
+  }
+  .meta-block {
+    margin-top: 2.5cm;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+  .meta-block strong {
+    font-weight: bold;
+  }
+  .links-block {
+    margin-top: 1.2cm;
+    font-size: 10pt;
+    border-top: 1px solid #cccccc;
+    padding-top: 0.5cm;
+    word-break: break-all;
+  }
+  h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000000;
+    padding-bottom: 4px;
+    margin-top: 1.5cm;
+    margin-bottom: 0.6cm;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 0.8cm;
+    margin-bottom: 0.4cm;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 0.5cm;
+    margin-bottom: 0.3cm;
+    page-break-after: avoid;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 0.4cm;
+    text-indent: 0.6cm;
+  }
+  p.no-indent {
+    text-indent: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.6cm 0 0.8cm 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #333333;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+  }
+  .table-caption {
+    font-size: 9.5pt;
+    font-style: italic;
+    text-align: center;
+    margin-top: -0.3cm;
+    margin-bottom: 0.6cm;
+  }
+  ul, ol {
+    margin-top: 0;
+    margin-bottom: 0.4cm;
+    padding-left: 0.8cm;
+  }
+  li {
+    margin-bottom: 0.15cm;
+  }
+  code {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 9.5pt;
+    background-color: #f7f7f7;
+    padding: 1px 3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE DE GARDE -->
+<div class="title-page">
+  <div class="institution">Certification en Science des Données</div>
+  <div class="module">Travaux Pratiques – Msc. Osias Noël TOSSOU</div>
+
+  <div class="main-title">
+    Projet Intégrateur : De la Donnée Brute au Déploiement
+  </div>
+  <div class="subtitle">
+    Prédiction et Modélisation de l'Inclusion Financière en Afrique de l'Est
+  </div>
+
+  <div class="meta-block">
+    <p class="no-indent"><strong>Rapport de Travaux Pratiques</strong></p>
+    <p class="no-indent">Auteur : Groupe de Travail de Science des Données</p>
+    <p class="no-indent">Date de soumission : 5 novembre 2026</p>
+  </div>
+
+  <div class="links-block">
+    <p class="no-indent"><strong>Dépôt GitHub public :</strong> https://github.com/OLOUNLAD/Financial-inclusion-africa</p>
+    <p class="no-indent"><strong>Application déployée en ligne :</strong> https://financial-inclusion-africa-4duh.onrender.com</p>
+  </div>
+</div>
+
+<!-- SECTION 1 : PROBLÉMATIQUE MÉTIER -->
+<h1>1. Contexte et Problématique Métier</h1>
+
+<h2>1.1 Contexte socio-économique</h2>
+<p>
+L'accès aux services financiers formels constitue l'un des piliers essentiels de l'émancipation économique et de la réduction de la pauvreté dans les économies émergentes, singulièrement en Afrique subsaharienne. Disposer d'un compte bancaire permet aux ménages d'épargner de manière sécurisée, d'atténuer la vulnérabilité face aux chocs économiques imprévus, d'obtenir des crédits d'investissement et d'accéder à des mécanismes d'assurance formels.
+</p>
+<p>
+Malgré l'avènement des services de monnaie électronique (Mobile Money), une proportion significative de la population adulte demeure non bancarisée au sein des économies d'Afrique de l'Est. Ce projet étudie les déterminants socio-démographiques sous-jacents dans quatre pays de la région : le Kenya, le Rwanda, la Tanzanie et l'Ouganda.
+</p>
+
+<h2>1.2 Acteurs concernés et enjeux</h2>
+<p>
+Les résultats de ce travail s'adressent à trois catégories principales de décideurs :
+</p>
+<ul>
+  <li><strong>Les institutions financières commerciales et de micro-finance :</strong> compréhension fine des profils clients, évaluation du risque et conception d'offres bancaires d'entrée de gamme adaptées.</li>
+  <li><strong>Les régulateurs et banques centrales :</strong> mesure du taux d'inclusion financière et pilotage des stratégies nationales de bancarisation.</li>
+  <li><strong>Les organisations non gouvernementales et bailleurs de fonds :</strong> ciblage des populations prioritaires (femmes, zones rurales, travailleurs informels).</li>
+</ul>
+
+<h2>1.3 Formulation du problème en Science des Données</h2>
+<p class="no-indent">
+L'objectif est formulé comme un problème d'<strong>apprentissage supervisé de classification binaire</strong> :
+</p>
+<p>
+Soit un vecteur de caractéristiques individuelles <code>X</code> (variables géographiques, démographiques et socio-professionnelles), déterminer la probabilité d'appartenance à la classe positive, où la variable cible <code>Y</code> prend la valeur 1 si l'individu possède ou utilise un compte bancaire formel, et 0 dans le cas contraire.
+</p>
+
+<!-- SECTION 2 : ANALYSE EXPLORATOIRE DES DONNÉES -->
+<h1>2. Analyse Exploratoire des Données (EDA)</h1>
+
+<h2>2.1 Description du jeu de données</h2>
+<p>
+Les données analysées sont issues des enquêtes nationales <em>FinScope</em>, publiées sur la plateforme <em>Zindi Africa</em> dans le cadre du défi <em>Financial Inclusion in Africa</em>. Le jeu de données consolidé comprend <strong>23 524 observations</strong> et <strong>13 variables</strong> réparties comme suit :
+</p>
+<ul>
+  <li><strong>Variable cible :</strong> <code>bank_account</code> (Yes / No).</li>
+  <li><strong>Variables numériques :</strong> âge de l'enquêté (<code>age_of_respondent</code>, variant de 16 à 100 ans) et taille du ménage (<code>household_size</code>, de 1 à 21 membres).</li>
+  <li><strong>Variables catégorielles :</strong> pays (Kenya, Rwanda, Tanzanie, Ouganda), milieu de résidence (Rural, Urban), possession d'un téléphone portable (Yes, No), genre (Female, Male), relation avec le chef de ménage (7 modalités), statut matrimonial (5 modalités), niveau d'instruction (6 modalités) et type d'activité professionnelle (10 modalités).</li>
+  <li><strong>Identifiant et temporalité :</strong> <code>uniqueid</code> et <code>year</code> (2016 à 2018).</li>
+</ul>
+
+<h2>2.2 Audit de la qualité des données</h2>
+<p>
+L'audit technique réalisé sur l'échantillon met en relief les constats suivants :
+</p>
+<ul>
+  <li><strong>Valeurs manquantes :</strong> aucune valeur nulle ou non renseignée n'est relevée sur l'ensemble des 23 524 lignes.</li>
+  <li><strong>Unicité des identifiants :</strong> la variable <code>uniqueid</code> n'est pas unique au niveau global (réutilisée d'un pays à l'autre). L'individu est formellement identifié par le couple <code>(country, uniqueid)</code>. Cette variable n'ayant aucune valeur explicative, elle a été exclue de la modélisation.</li>
+  <li><strong>Lignes de profils identiques :</strong> 4 429 individus partagent des profils socio-démographiques rigoureusement identiques tout en ayant des identifiants distincts. Ces observations ont été intégralement conservées afin de ne pas biaiser la représentativité statistique de la population.</li>
+</ul>
+
+<h2>2.3 Statistiques descriptives et déséquilibre de la variable cible</h2>
+<p>
+L'analyse univariée de la variable cible met en évidence un <strong>fort déséquilibre de classes</strong> :
+</p>
+<ul>
+  <li>Classe 0 (Non bancarisé) : 20 212 individus, soit <strong>85,92 %</strong>.</li>
+  <li>Classe 1 (Bancarisé) : 3 312 individus, soit <strong>14,08 %</strong>.</li>
+</ul>
+<p>
+Ce ratio d'environ 6 pour 1 impose d'écarter l'exactitude brute (<em>Accuracy</em>) comme métrique décisionnelle, celle-ci étant trompeuse dans un contexte de rareté relative de la classe positive.
+</p>
+
+<h2>2.4 Analyse bivariée et tests d'association</h2>
+<p>
+Des tests statistiques de dépendance (test du Chi-carré d'indépendance et calcul du coefficient <em>V de Cramér</em>) ont été conduits sur chaque variable explicative par rapport à la cible :
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>V de Cramér</th>
+      <th>p-value (Chi-2)</th>
+      <th>Interprétation métier</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Niveau d'éducation (education_level)</td>
+      <td>0,392</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Facteur discriminant n°1 (57 % d'accès au niveau supérieur vs 4 % sans instruction).</td>
+    </tr>
+    <tr>
+      <td>Type d'emploi (job_type)</td>
+      <td>0,361</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Facteur n°2 (77 % pour fonctionnaires, 54 % pour salariés privés, &lt; 8 % informel).</td>
+    </tr>
+    <tr>
+      <td>Accès au téléphone (cellphone_access)</td>
+      <td>0,208</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Pré-requis matériel indispensable (18 % avec téléphone vs 2 % sans).</td>
+    </tr>
+    <tr>
+      <td>Pays (country)</td>
+      <td>0,188</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Disparité régionale nette (Kenya 25 % vs Tanzanie et Ouganda &lt; 10 %).</td>
+    </tr>
+    <tr>
+      <td>Milieu de résidence (location_type)</td>
+      <td>0,119</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Taux supérieur en milieu urbain (18 %) comparativement au milieu rural (12 %).</td>
+    </tr>
+    <tr>
+      <td>Genre (gender_of_respondent)</td>
+      <td>0,103</td>
+      <td>&lt; 10⁻⁴⁵</td>
+      <td>Écart de bancarisation significatif (19 % chez les hommes vs 11 % chez les femmes).</td>
+    </tr>
+  </tbody>
+</table>
+<div class="table-caption">Tableau 1 : Force d'association statistique avec la possession d'un compte bancaire.</div>
+
+<p>
+L'analyse de l'âge indique une dynamique non linéaire en cloche : le taux de bancarisation est faible chez les jeunes de 16 à 24 ans (7,5 %), atteint son apogée entre 35 et 44 ans (18,2 %), avant de décroître chez les seniors (9,1 % au-delà de 75 ans).
+</p>
+
+<!-- SECTION 3 : MODÉLISATION -->
+<h1>3. Modélisation et Évaluation</h1>
+
+<h2>3.1 Prétraitement et stratégie de validation</h2>
+<p>
+Afin d'éviter tout phénomène de fuite d'information (<em>data leakage</em>), l'intégralité des transformations a été isolée au sein d'un pipeline scikit-learn (<code>ColumnTransformer</code>) :
+</p>
+<ul>
+  <li><strong>Variables numériques :</strong> normalisation centrée-réduite via <code>StandardScaler</code>.</li>
+  <li><strong>Variables catégorielles :</strong> encodage disjonctif complet via <code>OneHotEncoder(handle_unknown='ignore')</code>.</li>
+  <li><strong>Séparation des données :</strong> échantillonnage stratifié 80 % entraînement (18 819 observations) et 20 % test (4 705 observations).</li>
+</ul>
+
+<h2>3.2 Algorithmes comparés</h2>
+<p>
+Quatre familles d'algorithmes ont été évaluées de manière comparative :
+</p>
+<ol>
+  <li><strong>Régression Logistique :</strong> modèle linéaire de référence, robuste et directement interprétable.</li>
+  <li><strong>Forêt Aléatoire (Random Forest) :</strong> méthode ensembliste par ensachage (<em>bagging</em>), réduisant la variance.</li>
+  <li><strong>LightGBM :</strong> méthode de boosting d'arbres à gradient rapide et performante.</li>
+  <li><strong>XGBoost :</strong> implémentation avancée d'arbres de décision augmentés avec régularisation L2.</li>
+</ol>
+
+<h2>3.3 Gestion du déséquilibre et optimisation du seuil</h2>
+<p>
+Pour pallier le déséquilibre des classes, une pondération proportionnelle inverse a été appliquée (<code>scale_pos_weight = 6,09</code> pour XGBoost et <code>class_weight='balanced'</code> pour les autres modèles).
+</p>
+<p>
+De surcroît, le seuil de décision standard fixé à 0,5 n'est pas optimal sous déséquilibre. Un <strong>seuil de décision optimal</strong> maximisant le F1-Score a été calculé par validation croisée stratifiée à 5 plis sur les données d'entraînement uniquement (seuil retenu : <strong>0,68</strong>).
+</p>
+
+<h2>3.4 Synthèse comparative des résultats</h2>
+<p>
+L'évaluation sur l'échantillon de test indépendant (4 705 profils) aboutit aux résultats ci-dessous :
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Modèle</th>
+      <th>Exactitude (Accuracy)</th>
+      <th>Précision</th>
+      <th>Rappel (Recall)</th>
+      <th>F1-Score</th>
+      <th>ROC-AUC</th>
+      <th>Seuil optimal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Régression Logistique</td>
+      <td>85,70 %</td>
+      <td>49,35 %</td>
+      <td>62,69 %</td>
+      <td>0,5522</td>
+      <td>0,8646</td>
+      <td>0,65</td>
+    </tr>
+    <tr>
+      <td>Random Forest</td>
+      <td>85,55 %</td>
+      <td>48,95 %</td>
+      <td>63,60 %</td>
+      <td>0,5532</td>
+      <td>0,8702</td>
+      <td>0,62</td>
+    </tr>
+    <tr>
+      <td>LightGBM</td>
+      <td>87,08 %</td>
+      <td>53,71 %</td>
+      <td>59,06 %</td>
+      <td>0,5626</td>
+      <td>0,8766</td>
+      <td>0,69</td>
+    </tr>
+    <tr>
+      <td><strong>XGBoost (Retenu)</strong></td>
+      <td><strong>86,93 %</strong></td>
+      <td><strong>53,14 %</strong></td>
+      <td><strong>60,12 %</strong></td>
+      <td><strong>0,5641</strong></td>
+      <td><strong>0,8767</strong></td>
+      <td><strong>0,68</strong></td>
+    </tr>
+  </tbody>
+</table>
+<div class="table-caption">Tableau 2 : Performances comparatives sur le jeu de test indépendant.</div>
+
+<p>
+Le modèle <strong>XGBoost</strong> est sélectionné comme modèle final de production en raison de son score <strong>ROC-AUC supérieur (0,8767)</strong> et de son F1-Score optimisé (0,5641), garantissant un équilibre rigoureux entre la détection des personnes bancarisées (Rappel de 60,12 %) et la minimisation des faux positifs.
+</p>
+
+<!-- SECTION 4 : DÉPLOIEMENT ET AUTOMATISATION -->
+<h1>4. Déploiement et Automatisation (MLOps)</h1>
+
+<h2>4.1 Architecture logicielle</h2>
+<p>
+L'architecture de production découple rigoureusement le moteur prédictif et l'interface utilisateur :
+</p>
+<ul>
+  <li><strong>Backend / Moteur d'inférence (FastAPI) :</strong> service REST en Python validant les schémas d'entrée via Pydantic, exécutant les prédictions en moins de 15 millisecondes et exposant les endpoints <code>/api/predict</code>, <code>/api/metrics</code> et <code>/api/stats</code>.</li>
+  <li><strong>Frontend utilisateur (React + Vite + Tailwind CSS) :</strong> interface web monopage interactive intégrant une jauge SVG animée, un simulateur de scénarios client et un tableau de bord analytique basé sur la bibliothèque Recharts.</li>
+</ul>
+
+<h2>4.2 Conteneurisation Docker</h2>
+<p>
+Le déploiement repose sur un <code>Dockerfile</code> multi-étape (<em>multi-stage build</em>) :
+</p>
+<ol>
+  <li><strong>Étape de compilation :</strong> conteneur Node.js 22 compilant les sources TypeScript et générant les fichiers statiques optimisés dans <code>frontend/dist</code>.</li>
+  <li><strong>Étape de production :</strong> conteneur Python 3.12-slim intégrant les librairies système (notamment <code>libgomp1</code> requise par XGBoost), les packages scikit-learn et le serveur ASGI Uvicorn servant simultanément l'API et les fichiers statiques sur le port 8000.</li>
+</ol>
+<p>
+L'ensemble est orchestré via un fichier <code>docker-compose.yml</code> standardisé.
+</p>
+
+<h2>4.3 Pipeline de réentraînement automatique (Retraining)</h2>
+<p>
+Pour prévenir l'obsolescence du modèle face aux évolutions économiques, un pipeline automatisé a été implémenté (<code>src/retrain.py</code>) :
+</p>
+<ul>
+  <li><strong>Validation sur seuil de performance :</strong> tout modèle candidat doit obtenir un score ROC-AUC supérieur ou égal à 0,75 pour être déployé en remplacement du modèle actif.</li>
+  <li><strong>Traçabilité :</strong> chaque exécution est consignée avec horodatage, métriques obtenues et décision de déploiement dans le journal <code>retraining.log</code>.</li>
+  <li><strong>Planification :</strong> configuration d'une tâche planifiée Unix (Cron) hebdomadaire (<code>scripts/retrain_cron.sh</code> et <code>cron/crontab.txt</code>).</li>
+  <li><strong>Déclenchement distant :</strong> mise à disposition d'un endpoint <code>POST /api/retrain</code> permettant l'intégration avec des outils d'orchestration (Airflow, webhooks).</li>
+</ul>
+
+<h2>4.4 Déploiement Cloud</h2>
+<p>
+L'application a été mise en ligne sur la plateforme d'infrastructure <em>Render</em>, reliée directement au dépôt GitHub :
+</p>
+<p class="no-indent">
+<strong>Accès direct :</strong> <a href="https://financial-inclusion-africa-4duh.onrender.com">https://financial-inclusion-africa-4duh.onrender.com</a>
+</p>
+
+<!-- SECTION 5 : LIMITES ET PERSPECTIVES -->
+<h1>5. Résultats, Limites et Perspectives</h1>
+
+<h2>5.1 Limites du projet</h2>
+<ul>
+  <li><strong>Confusion pays/année :</strong> les enquêtes nationales ont été administrées à des années distinctes (Kenya en 2018, Rwanda en 2016, Tanzanie en 2017). Les effets temporels et nationaux sont donc partiellement corrélés.</li>
+  <li><strong>Absence de métriques de revenu continu :</strong> la variable financière disponible est qualitative (type d'emploi), limitant l'estimation précise de la capacité d'épargne.</li>
+</ul>
+
+<h2>5.2 Perspectives d'évolution</h2>
+<ul>
+  <li><strong>Enrichissement par les données transactionnelles de Mobile Money :</strong> intégration des volumes de transfert et de paiement marchand pour modéliser le passage de la monnaie électronique vers le compte bancaire classique.</li>
+  <li><strong>Explicabilité locale :</strong> implémentation de valeurs SHAP (<em>SHapley Additive exPlanations</em>) dans l'interface utilisateur pour justifier chaque décision de scoring auprès des analystes de crédit.</li>
+</ul>
+
+<!-- SECTION 6 : CONCLUSION -->
+<h1>6. Conclusion</h1>
+<p>
+Ce projet intégrateur a permis de parcourir avec rigueur l'ensemble de la chaîne de valeur de la Science des Données : de l'audit de qualité et de l'exploration statistique sur des données réelles africaines, jusqu'au déploiement d'une application conteneurisée et monitorée en production.
+</p>
+<p>
+Le modèle retenu (XGBoost) atteint un niveau de discrimination robuste (ROC-AUC de 0,8767), soutenu par une interface décisionnelle réactive et un mécanisme de réentraînement autonome garantissant la pérennité de la solution.
+</p>
+
+</body>
+</html>
