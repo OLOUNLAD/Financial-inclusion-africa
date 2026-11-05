@@ -1,0 +1,52 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Environment variables
+.env
+
+# Large temporary datasets / Zindi raw extraction archive
+financial-inclusion-in-africa*/
+
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Captures du navigateur de test
+.playwright-mcp/

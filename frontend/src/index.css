@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Thème "Emerald Slate" de 21st.dev (mode sombre) */
+:root {
+  --background: #0a0e1a;
+  --foreground: #f1f5f9;
+  --card: #111827;
+  --border: #1e293b;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --primary: #10b981;
+  --primary-foreground: #0a0e1a;
+  --destructive: #ef4444;
+  --warning: #fbbf24;
+  --radius: 0.75rem;
+}
+
+html, body, #root { min-height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16, 185, 129, 0.15), transparent),
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(56, 189, 248, 0.08), transparent);
+  background-attachment: fixed;
+}
+
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+select, input, button { font-family: inherit; }
+
+/* Curseur (slider) */
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; border-radius: 999px;
+  background: var(--muted); outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--primary); border: 3px solid var(--background);
+  box-shadow: 0 0 0 1px var(--primary); cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--primary); border: 3px solid var(--background); cursor: pointer;
+}

@@ -1,0 +1,14 @@
+# ==============================================================================
+# Planification cron pour le réentraînement automatique du modèle Data Science
+# Exemple : Exécution automatique chaque dimanche à 02h00 du matin
+# ==============================================================================
+# 
+# Pour installer cette tâche cron sur votre serveur :
+#   crontab -e
+# Puis ajoutez la ligne suivante :
+#
+0 2 * * 0 /home/stj/Projects/Formation\ sur\ une\ certification\ en\ science\ de\ donnée/Data_science/scripts/retrain_cron.sh >> /home/stj/Projects/Formation\ sur\ une\ certification\ en\ science\ de\ donnée/Data_science/retraining.log 2>&1
+#
+# Alternative : déclenchement distant via l'API REST FastAPI :
+#   0 2 * * 0 curl -X POST http://localhost:8000/api/retrain
+

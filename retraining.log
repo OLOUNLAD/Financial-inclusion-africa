@@ -1,0 +1,6 @@
+2026-11-05 08:31:47,458 [INFO] Démarrage du réentraînement avec le fichier : data/Train.csv
+2026-11-05 08:31:48,738 [INFO] Réentraînement réussi avec succès. Modèle : LightGBM | ROC-AUC: 0.8601 >= Seuil (0.7500). Nouveau modèle déployé en production.
+2026-11-05 11:38:08,880 [INFO] Démarrage du réentraînement avec le fichier : data/Train.csv
+2026-11-05 11:38:26,507 [INFO] Réentraînement réussi avec succès. Modèle : XGBoost | ROC-AUC: 0.8767 >= Seuil (0.7500). Nouveau modèle déployé en production.
+2026-11-05 11:39:39,990 [INFO] Démarrage du réentraînement avec le fichier : data/Train.csv
+2026-11-05 11:39:56,988 [INFO] Réentraînement réussi avec succès. Modèle : XGBoost | ROC-AUC: 0.8767 >= Seuil (0.7500). Nouveau modèle déployé en production.
