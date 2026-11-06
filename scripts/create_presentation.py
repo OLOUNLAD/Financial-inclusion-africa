@@ -1,40 +1,53 @@
-"""Générateur de présentation de soutenance haut de gamme, sobre et élégante.
+"""Générateur de présentation officielle haut de gamme, aérée et visuelle.
 
-Style : Design exécutif / académique institutionnel (style McKinsey / Stanford).
-- Palette sobre et raffinée (Ardoise profonde, Bleu saphir sobre, cartes grises douces).
-- Structure en cartes et blocs KPI pour aérer le contenu et éliminer les listes à puces monotones.
-- Typographie soignée, hiérarchie visuelle stricte, zéro emoji, zéro artifice criard.
-- Format : 16:9 panoramique standard (13.333" x 7.5").
+Caractéristiques :
+- Textes allégés et concis : phrases percutantes, zéro pavé indigeste.
+- Vrais SCHÉMAS intégrés :
+  * Slide 7  : Schéma de jauge de proportion / ratio de déséquilibre
+  * Slide 8  : Schéma comparatif en barres horizontales (Cramér's V)
+  * Slide 9  : Schéma de workflow du pipeline de prétraitement (Flowchart 4 étapes)
+  * Slide 13 : Schéma d'architecture technique globale (Client -> React -> FastAPI -> Modèle -> Docker/Render)
+  * Slide 14 : Schéma de boucle décisionnelle MLOps (Nouvelles données -> Quality Gate -> Prod / Rejet)
+- Style : Épuré, élégant, strictement académique et professionnel.
+- Format : 16:9 widescreen (13.333" x 7.5").
 """
 
-import os
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
-# 1. Palette de couleurs raffinée et sobre
-COLOR_BG_DARK = RGBColor(15, 23, 42)        # Midnight Slate #0f172a (Page de garde)
-COLOR_NAVY = RGBColor(15, 23, 42)           # Titres principaux
-COLOR_BLUE_ACCENT = RGBColor(30, 58, 138)   # Bleu institutionnel #1e3a8a
-COLOR_BLUE_LINE = RGBColor(37, 99, 235)     # Ligne d'accent #2563eb
-COLOR_BLUE_SOFT = RGBColor(239, 246, 255)   # Fond surligné #eff6ff
-COLOR_BLUE_BORDER = RGBColor(191, 219, 254) # Bordure surlignée #bfdbfe
+# ==============================================================================
+# PALETTE DE COULEURS ÉLÉGANTE ET SOBRE
+# ==============================================================================
+COLOR_BG_DARK = RGBColor(15, 23, 42)        # #0f172a Ardoise nuit
+COLOR_NAVY = RGBColor(15, 23, 42)           # #0f172a Titres
+COLOR_BLUE_ACCENT = RGBColor(30, 58, 138)   # #1e3a8a Bleu institutionnel
+COLOR_BLUE_LINE = RGBColor(37, 99, 235)     # #2563eb Bleu saphir
+COLOR_BLUE_SOFT = RGBColor(239, 246, 255)   # #eff6ff Bleu très clair
+COLOR_BLUE_BORDER = RGBColor(191, 219, 254) # #bfdbfe Bordure bleue
 
-COLOR_TEXT_PRIMARY = RGBColor(30, 41, 59)   # Texte foncé #1e293b
-COLOR_TEXT_MUTED = RGBColor(100, 116, 139)  # Texte secondaire #64748b
-COLOR_TEXT_LIGHT = RGBColor(226, 232, 240)  # Texte blanc cassé #e2e8f0
-
-COLOR_CARD_BG = RGBColor(248, 250, 252)     # Fond carte #f8fafc
-COLOR_CARD_BORDER = RGBColor(226, 232, 240) # Bordure carte #e2e8f0
+COLOR_TEXT_PRIMARY = RGBColor(30, 41, 59)   # #1e293b Texte principal
+COLOR_TEXT_MUTED = RGBColor(100, 116, 139)  # #64748b Texte secondaire
 COLOR_WHITE = RGBColor(255, 255, 255)
+
+COLOR_CARD_BG = RGBColor(248, 250, 252)     # #f8fafc Fond carte
+COLOR_CARD_BORDER = RGBColor(226, 232, 240) # #e2e8f0 Bordure carte
+
+COLOR_SUCCESS_BG = RGBColor(240, 253, 244)  # #f0fdf4 Vert feutré (Quality gate OK)
+COLOR_SUCCESS_BORDER = RGBColor(187, 247, 208)
+COLOR_SUCCESS_TEXT = RGBColor(22, 101, 52)
+
+COLOR_DANGER_BG = RGBColor(254, 242, 242)   # #fef2f2 Rouge feutré (Rejet)
+COLOR_DANGER_BORDER = RGBColor(254, 202, 202)
+COLOR_DANGER_TEXT = RGBColor(153, 27, 27)
 
 FONT_HEADING = "Arial"
 FONT_BODY = "Arial"
 
 
-def init_presentation():
+def init_prs():
     prs = Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
@@ -42,9 +55,8 @@ def init_presentation():
 
 
 def add_slide_header(slide, title_text, category_text, slide_num):
-    """Ajoute l'en-tête de slide moderne avec fil d'Ariane et séparateur élégant."""
-    # En-tête textuel
-    tb = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.7), Inches(0.95))
+    """En-tête standard épuré avec fil d'Ariane et séparateur bicolore."""
+    tb = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.7), Inches(0.9))
     tf = tb.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
@@ -64,31 +76,29 @@ def add_slide_header(slide, title_text, category_text, slide_num):
     p_title.font.bold = True
     p_title.font.color.rgb = COLOR_NAVY
 
-    # Ligne d'accent subtile sous le titre
-    line_bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.42), Inches(11.7), Inches(0.015))
+    # Ligne d'accent bicolore
+    line_bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.35), Inches(11.7), Inches(0.015))
     line_bg.fill.solid()
     line_bg.fill.fore_color.rgb = COLOR_CARD_BORDER
     line_bg.line.fill.background()
 
-    line_accent = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.42), Inches(1.2), Inches(0.02))
+    line_accent = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.35), Inches(1.2), Inches(0.02))
     line_accent.fill.solid()
     line_accent.fill.fore_color.rgb = COLOR_BLUE_LINE
     line_accent.line.fill.background()
 
-    # Footer institutionnel
-    foot_tb = slide.shapes.add_textbox(Inches(0.8), Inches(7.05), Inches(11.7), Inches(0.35))
+    # Footer
+    foot_tb = slide.shapes.add_textbox(Inches(0.8), Inches(7.08), Inches(10.0), Inches(0.3))
     ftf = foot_tb.text_frame
     ftf.word_wrap = True
     ftf.margin_left = ftf.margin_top = ftf.margin_right = ftf.margin_bottom = 0
-    
     p_foot = ftf.paragraphs[0]
     p_foot.text = "Certification en Science des Données • Travaux Pratiques — Msc. Osias Noël TOSSOU"
     p_foot.font.name = FONT_BODY
     p_foot.font.size = Pt(9)
     p_foot.font.color.rgb = COLOR_TEXT_MUTED
 
-    # Numéro de slide
-    num_tb = slide.shapes.add_textbox(Inches(11.0), Inches(7.05), Inches(1.5), Inches(0.35))
+    num_tb = slide.shapes.add_textbox(Inches(11.0), Inches(7.08), Inches(1.5), Inches(0.3))
     ntf = num_tb.text_frame
     ntf.word_wrap = True
     ntf.margin_left = ntf.margin_top = ntf.margin_right = ntf.margin_bottom = 0
@@ -102,7 +112,6 @@ def add_slide_header(slide, title_text, category_text, slide_num):
 
 
 def add_card(slide, left, top, width, height, bg_color=COLOR_CARD_BG, border_color=COLOR_CARD_BORDER):
-    """Crée une carte rectangulaire propre avec bordure douce."""
     card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
     card.fill.solid()
     card.fill.fore_color.rgb = bg_color
@@ -112,9 +121,8 @@ def add_card(slide, left, top, width, height, bg_color=COLOR_CARD_BG, border_col
 
 
 def add_kpi_card(slide, left, top, width, height, value, label, subtext=None, val_color=COLOR_BLUE_ACCENT, bg_color=COLOR_CARD_BG, border_color=COLOR_CARD_BORDER):
-    """Crée une carte KPI moderne avec grande métrique chiffrée."""
     add_card(slide, left, top, width, height, bg_color, border_color)
-    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.18), width - Inches(0.4), height - Inches(0.36))
+    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.15), width - Inches(0.4), height - Inches(0.3))
     tf = tb.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
@@ -122,7 +130,7 @@ def add_kpi_card(slide, left, top, width, height, value, label, subtext=None, va
     p_val = tf.paragraphs[0]
     p_val.text = value
     p_val.font.name = FONT_HEADING
-    p_val.font.size = Pt(28)
+    p_val.font.size = Pt(27)
     p_val.font.bold = True
     p_val.font.color.rgb = val_color
     p_val.space_after = Pt(2)
@@ -143,19 +151,13 @@ def add_kpi_card(slide, left, top, width, height, value, label, subtext=None, va
         p_sub.font.color.rgb = COLOR_TEXT_MUTED
 
 
-def add_content_card(slide, left, top, width, height, title, items, tag=None, bg_color=COLOR_CARD_BG, border_color=COLOR_CARD_BORDER, highlight=False):
-    """Crée une carte de contenu structuré avec titre et puces formulées."""
-    if highlight:
-        bg_color = COLOR_BLUE_SOFT
-        border_color = COLOR_BLUE_BORDER
-
+def add_concise_card(slide, left, top, width, height, title, items, tag=None, bg_color=COLOR_CARD_BG, border_color=COLOR_CARD_BORDER):
     add_card(slide, left, top, width, height, bg_color, border_color)
-    tb = slide.shapes.add_textbox(left + Inches(0.28), top + Inches(0.25), width - Inches(0.56), height - Inches(0.5))
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), height - Inches(0.4))
     tf = tb.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
 
-    # Tag éventuel
     if tag:
         p_tag = tf.paragraphs[0]
         p_tag.text = tag.upper()
@@ -170,78 +172,75 @@ def add_content_card(slide, left, top, width, height, title, items, tag=None, bg
 
     p_title.text = title
     p_title.font.name = FONT_HEADING
-    p_title.font.size = Pt(13.5)
+    p_title.font.size = Pt(13)
     p_title.font.bold = True
     p_title.font.color.rgb = COLOR_NAVY
-    p_title.space_after = Pt(10)
+    p_title.space_after = Pt(8)
 
     for item in items:
         p = tf.add_paragraph()
-        p.space_after = Pt(7)
+        p.space_after = Pt(6)
         if isinstance(item, tuple):
             prefix, text = item
-            run_pref = p.add_run()
-            run_pref.text = prefix + " "
-            run_pref.font.name = FONT_BODY
-            run_pref.font.size = Pt(11)
-            run_pref.font.bold = True
-            run_pref.font.color.rgb = COLOR_NAVY
+            rp = p.add_run()
+            rp.text = "• " + prefix + " "
+            rp.font.name = FONT_BODY
+            rp.font.size = Pt(10.5)
+            rp.font.bold = True
+            rp.font.color.rgb = COLOR_NAVY
 
-            run_txt = p.add_run()
-            run_txt.text = text
-            run_txt.font.name = FONT_BODY
-            run_txt.font.size = Pt(11)
-            run_txt.font.color.rgb = COLOR_TEXT_PRIMARY
+            rt = p.add_run()
+            rt.text = text
+            rt.font.name = FONT_BODY
+            rt.font.size = Pt(10.5)
+            rt.font.color.rgb = COLOR_TEXT_PRIMARY
         else:
             p.text = "• " + item
             p.font.name = FONT_BODY
-            p.font.size = Pt(11)
+            p.font.size = Pt(10.5)
             p.font.color.rgb = COLOR_TEXT_PRIMARY
 
 
 # ==============================================================================
-# CONSTRUCTION DES SLIDES
+# GÉNÉRATION DES 16 SLIDES
 # ==============================================================================
-prs = init_presentation()
+prs = init_prs()
 blank_layout = prs.slide_layouts[6]
 
 # ------------------------------------------------------------------------------
-# SLIDE 1 : PAGE DE GARDE (Élégance institutionnelle sombre)
+# SLIDE 1 : PAGE DE GARDE INSTITUTIONNELLE
 # ------------------------------------------------------------------------------
 s1 = prs.slides.add_slide(blank_layout)
 
-# Fond sombre complet
 bg1 = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(7.5))
 bg1.fill.solid()
 bg1.fill.fore_color.rgb = COLOR_BG_DARK
 bg1.line.fill.background()
 
-# Ligne d'accent supérieure
 top_bar = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, Inches(13.333), Inches(0.08))
 top_bar.fill.solid()
 top_bar.fill.fore_color.rgb = COLOR_BLUE_LINE
 top_bar.line.fill.background()
 
-# Bloc central
-tb1 = s1.shapes.add_textbox(Inches(1.2), Inches(1.3), Inches(10.9), Inches(3.2))
+tb1 = s1.shapes.add_textbox(Inches(1.2), Inches(1.4), Inches(10.9), Inches(3.0))
 tf1 = tb1.text_frame
 tf1.word_wrap = True
 
-p_badge = tf1.paragraphs[0]
-p_badge.text = "CERTIFICATION EN SCIENCE DES DONNÉES • TRAVAUX PRATIQUES"
-p_badge.font.name = FONT_HEADING
-p_badge.font.size = Pt(11)
-p_badge.font.bold = True
-p_badge.font.color.rgb = RGBColor(148, 163, 184)
-p_badge.space_after = Pt(14)
+p_b = tf1.paragraphs[0]
+p_b.text = "CERTIFICATION EN SCIENCE DES DONNÉES • TRAVAUX PRATIQUES"
+p_b.font.name = FONT_HEADING
+p_b.font.size = Pt(11)
+p_b.font.bold = True
+p_b.font.color.rgb = RGBColor(148, 163, 184)
+p_b.space_after = Pt(14)
 
-p_t1 = tf1.add_paragraph()
-p_t1.text = "De la Donnée Brute au Déploiement"
-p_t1.font.name = FONT_HEADING
-p_t1.font.size = Pt(34)
-p_t1.font.bold = True
-p_t1.font.color.rgb = COLOR_WHITE
-p_t1.space_after = Pt(8)
+p_t = tf1.add_paragraph()
+p_t.text = "De la Donnée Brute au Déploiement"
+p_t.font.name = FONT_HEADING
+p_t.font.size = Pt(34)
+p_t.font.bold = True
+p_t.font.color.rgb = COLOR_WHITE
+p_t.space_after = Pt(8)
 
 p_sub = tf1.add_paragraph()
 p_sub.text = "Modélisation et Déploiement de l'Inclusion Financière en Afrique de l'Est"
@@ -249,11 +248,10 @@ p_sub.font.name = FONT_HEADING
 p_sub.font.size = Pt(18)
 p_sub.font.color.rgb = RGBColor(191, 219, 254)
 
-# 3 Cartes d'information au bas de la couverture
 cover_cards = [
     ("Encadrement Académique", "Msc. Osias Noël TOSSOU", "Évaluation des travaux pratiques"),
     ("Dépôt GitHub", "OLOUNLAD/Financial-inclusion-africa", "Code source, pipeline et tests"),
-    ("Déploiement Cloud", "financial-inclusion-africa-4duh.onrender.com", "Application web opérationnelle")
+    ("Application Active", "financial-inclusion-africa-4duh.onrender.com", "Déploiement en ligne opérationnel")
 ]
 
 for i, (title, val, desc) in enumerate(cover_cards):
@@ -296,36 +294,18 @@ for i, (title, val, desc) in enumerate(cover_cards):
     p3.font.color.rgb = RGBColor(148, 163, 184)
 
 # ------------------------------------------------------------------------------
-# SLIDE 2 : SOMMAIRE (Structure en 6 cartes numérotées)
+# SLIDE 2 : SOMMAIRE EN 6 BLOCS NUMÉROTÉS
 # ------------------------------------------------------------------------------
 s2 = prs.slides.add_slide(blank_layout)
-add_slide_header(s2, "Plan Structuré de la Soutenance", "STRUCTURE DU PROJET", 2)
+add_slide_header(s2, "Plan de la Présentation", "STRUCTURE DU PROJET", 2)
 
 agenda_items = [
-    ("01", "Contexte & Problématique Métier", [
-        ("Enjeu :", "Inclusion financière en Afrique de l'Est"),
-        ("Cadrage :", "Classification binaire et parties prenantes")
-    ]),
-    ("02", "Analyse Exploratoire des Données (EDA)", [
-        ("Audit :", "23 524 observations, intégrité et doublons"),
-        ("Constats :", "Déséquilibre de classe et facteurs clés")
-    ]),
-    ("03", "Prétraitement & Feature Engineering", [
-        ("Pipeline :", "ColumnTransformer scikit-learn rigoureux"),
-        ("Découpage :", "Stratification 80/20 sans data leakage")
-    ]),
-    ("04", "Modélisation & Benchmark Comparatif", [
-        ("Algorithmes :", "Régression Logistique, RF, LightGBM, XGBoost"),
-        ("Sélection :", "XGBoost retenu (ROC-AUC 0,8767, seuil 0,68)")
-    ]),
-    ("05", "Architecture & Déploiement Full-Stack", [
-        ("Backend / Frontend :", "FastAPI haute performance & React Vite"),
-        ("Conteneurisation :", "Multi-stage Docker sur Render Cloud")
-    ]),
-    ("06", "MLOps, Démonstration & Bilan", [
-        ("Automatisation :", "Quality gate ROC-AUC >= 0,75 & Cron"),
-        ("Synthèse :", "Démonstration active, limites et perspectives")
-    ]),
+    ("01", "Contexte & Problématique Métier", [("Enjeu :", "Inclusion financière en Afrique de l'Est"), ("Cadrage :", "Classification binaire supervisée")]),
+    ("02", "Analyse Exploratoire des Données", [("Audit :", "23 524 enquêtes, intégrité 100 %"), ("Constats :", "Déséquilibre cible & facteurs clés")]),
+    ("03", "Pipeline de Prétraitement", [("Ingénierie :", "ColumnTransformer & Encodages"), ("Protocole :", "Stratification 80/20 étanche")]),
+    ("04", "Modélisation & Benchmark", [("Comparatif :", "Évaluation des 4 algorithmes"), ("Sélection :", "XGBoost retenu (ROC-AUC 0,8767)")]),
+    ("05", "Architecture & Déploiement", [("Stack :", "FastAPI, React/Vite, Docker"), ("Production :", "Hébergement actif sur Render Cloud")]),
+    ("06", "MLOps, Démo & Perspectives", [("Cycle continu :", "Quality Gate & Tâche Cron"), ("Démonstration :", "Application active & Bilan")]),
 ]
 
 for idx, (num, title, bullets) in enumerate(agenda_items):
@@ -334,10 +314,9 @@ for idx, (num, title, bullets) in enumerate(agenda_items):
     bx = Inches(0.8 + col * 3.95)
     by = Inches(1.75 + row * 2.5)
     bw = Inches(3.75)
-    bh = Inches(2.3)
+    bh = Inches(2.25)
 
     add_card(s2, bx, by, bw, bh)
-
     tb = s2.shapes.add_textbox(bx + Inches(0.25), by + Inches(0.2), bw - Inches(0.5), bh - Inches(0.4))
     tf = tb.text_frame
     tf.word_wrap = True
@@ -346,7 +325,7 @@ for idx, (num, title, bullets) in enumerate(agenda_items):
     p_num = tf.paragraphs[0]
     p_num.text = num
     p_num.font.name = FONT_HEADING
-    p_num.font.size = Pt(18)
+    p_num.font.size = Pt(17)
     p_num.font.bold = True
     p_num.font.color.rgb = COLOR_BLUE_ACCENT
     p_num.space_after = Pt(2)
@@ -354,262 +333,391 @@ for idx, (num, title, bullets) in enumerate(agenda_items):
     p_t = tf.add_paragraph()
     p_t.text = title
     p_t.font.name = FONT_HEADING
-    p_t.font.size = Pt(12.5)
+    p_t.font.size = Pt(12)
     p_t.font.bold = True
     p_t.font.color.rgb = COLOR_NAVY
-    p_t.space_after = Pt(8)
+    p_t.space_after = Pt(6)
 
     for pref, desc in bullets:
         p_b = tf.add_paragraph()
-        p_b.space_after = Pt(4)
-        r_p = p_b.add_run()
-        r_p.text = "• " + pref + " "
-        r_p.font.name = FONT_BODY
-        r_p.font.size = Pt(10)
-        r_p.font.bold = True
-        r_p.font.color.rgb = COLOR_NAVY
-
-        r_d = p_b.add_run()
-        r_d.text = desc
-        r_d.font.name = FONT_BODY
-        r_d.font.size = Pt(10)
-        r_d.font.color.rgb = COLOR_TEXT_PRIMARY
+        p_b.space_after = Pt(3)
+        rp = p_b.add_run()
+        rp.text = "• " + pref + " "
+        rp.font.name = FONT_BODY
+        rp.font.size = Pt(10)
+        rp.font.bold = True
+        rp.font.color.rgb = COLOR_NAVY
+        rt = p_b.add_run()
+        rt.text = desc
+        rt.font.name = FONT_BODY
+        rt.font.size = Pt(10)
+        rt.font.color.rgb = COLOR_TEXT_PRIMARY
 
 # ------------------------------------------------------------------------------
-# SLIDE 3 : CONTEXTE ET ENJEUX MÉTIER (3 Cartes verticales)
+# SLIDE 3 : CONTEXTE ET ENJEUX MÉTIER (Aéré, 3 cartes concises)
 # ------------------------------------------------------------------------------
 s3 = prs.slides.add_slide(blank_layout)
 add_slide_header(s3, "Contexte et Enjeux de l'Inclusion Financière", "1. PROBLÉMATIQUE MÉTIER", 3)
 
 s3_cards = [
-    ("Levier de Développement", [
-        ("Rôle central :", "Vecteur essentiel de réduction de la pauvreté et de résilience face aux chocs économiques."),
-        ("Bénéfices directs :", "Permet l'accès à l'épargne sécurisée, au micro-crédit d'investissement et à l'assurance."),
-        ("Enjeu macro :", "Intégration formelle de populations historiquement marginalisées dans l'économie structurée.")
+    ("Enjeu Économique Majeur", [
+        ("Levier clé :", "Vecteur direct de réduction de la pauvreté et de résilience des ménages."),
+        ("Bénéfices :", "Accès à l'épargne sécurisée, aux micro-crédits et aux assurances."),
+        ("Impact :", "Intégration formelle des populations vulnérables dans l'économie.")
     ], "FONDATION"),
-    ("Contexte Régional Est-Africain", [
-        ("Périmètre géographique :", "Étude concentrée sur 4 nations clés : Kenya, Rwanda, Tanzanie et Ouganda."),
-        ("Boom technologique :", "Pénétration fulgurante du Mobile Money (ex. M-Pesa au Kenya)."),
-        ("Paradoxe persistant :", "Malgré les portefeuilles mobiles, une très large majorité n'a toujours aucun compte bancaire formel.")
-    ], "GÉOGRAPHIE"),
+    ("Le Paradoxe Est-Africain", [
+        ("Périmètre :", "4 nations cibles : Kenya, Rwanda, Tanzanie et Ouganda."),
+        ("Boom mobile :", "Adoption massive du Mobile Money (ex. M-Pesa)."),
+        ("Défi persistant :", "Faible bancarisation formelle malgré l'essor des téléphones.")
+    ], "RÉGION"),
     ("Finalité Opérationnelle", [
-        ("Détection prédictive :", "Identifier avec précision les profils individuels susceptibles d'adopter des services bancaires."),
-        ("Orientation des offres :", "Aider les banques et institutions de microfinance à concevoir des produits adaptés."),
-        ("Politiques publiques :", "Guider les régulateurs pour maximiser l'impact des campagnes nationales d'inclusion.")
+        ("Prédiction :", "Identifier les individus à fort potentiel de bancarisation."),
+        ("Ciblage :", "Optimiser l'offre des institutions financières et microfinances."),
+        ("Politiques publiques :", "Guider les régulateurs pour maximiser l'impact national.")
     ], "OBJECTIF")
 ]
 
 for i, (title, items, tag) in enumerate(s3_cards):
-    add_content_card(s3, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(5.0), title, items, tag=tag)
+    add_concise_card(s3, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(5.0), title, items, tag=tag)
 
 # ------------------------------------------------------------------------------
-# SLIDE 4 : CADRAGE DU PROBLÈME DATA SCIENCE (2 Grandes cartes)
+# SLIDE 4 : CADRAGE DATA SCIENCE ET ACTEURS (2 grandes cartes aérées)
 # ------------------------------------------------------------------------------
 s4 = prs.slides.add_slide(blank_layout)
 add_slide_header(s4, "Cadrage Data Science et Parties Prenantes", "1. PROBLÉMATIQUE MÉTIER", 4)
 
-s4_left = [
+s4_tech = [
     ("Type de problème :", "Classification binaire supervisée."),
-    ("Variable cible (Y) :", "bank_account (1 = Yes, 0 = No)."),
-    ("Variables d'entrée (X) :", "13 attributs socio-démographiques, économiques et d'équipement technologique."),
-    ("Nature des données :", "Données tabulaires d'enquêtes individuelles (FinScope)."),
-    ("Critère d'évaluation :", "Optimisation du ROC-AUC et du F1-Score sur la classe minoritaire pour contrer le déséquilibre."),
-    ("Contrainte de production :", "Temps de latence d'inférence < 50 ms pour le déploiement API.")
+    ("Cible Y :", "bank_account (1 = Oui, 0 = Non)."),
+    ("Entrées X :", "13 variables socio-démographiques et d'équipement."),
+    ("Objectif d'évaluation :", "Optimisation conjointe du ROC-AUC et du F1-score."),
+    ("Contrainte de latence :", "Inférence temps réel en production (< 50 ms).")
 ]
-add_content_card(s4, Inches(0.8), Inches(1.75), Inches(5.7), Inches(5.0), "Formulation Mathématique & Technique", s4_left, tag="CADRAGE ALGORITHMIQUE")
+add_concise_card(s4, Inches(0.8), Inches(1.75), Inches(5.7), Inches(5.0), "Cadrage Technique Data Science", s4_tech, tag="CADRAGE ALGORITHMIQUE")
 
-s4_right = [
-    ("Banques Commerciales :", "Scoring prédictif des prospects, optimisation des coûts d'acquisition et ciblage des campagnes."),
-    ("Institutions de Microfinance :", "Attribution sécurisée de micro-crédits et ouverture de comptes d'épargne ruraux."),
-    ("Régulateurs & Banques Centrales :", "Suivi précis des indicateurs nationaux d'inclusion et pilotage des réglementations."),
-    ("Bailleurs & ONG de Développement :", "Évaluation de l'efficacité des programmes d'aide et autonomisation financière des femmes.")
+s4_business = [
+    ("Banques Commerciales :", "Scoring des prospects et réduction des coûts d'acquisition client."),
+    ("Institutions de Microfinance :", "Octroi ciblé de micro-crédits et ouvertures de comptes d'épargne."),
+    ("Régulateurs & Banques Centrales :", "Mesure objective et pilotage des politiques publiques d'inclusion."),
+    ("Bailleurs & ONG :", "Orientation des programmes d'aide et émancipation économique.")
 ]
-add_content_card(s4, Inches(6.8), Inches(1.75), Inches(5.7), Inches(5.0), "Acteurs Concernés & Cas d'Usage Métier", s4_right, tag="ÉCOSYSTÈME & VALEUR")
+add_concise_card(s4, Inches(6.8), Inches(1.75), Inches(5.7), Inches(5.0), "Parties Prenantes & Cas d'Usage", s4_business, tag="ÉCOSYSTÈME MÉTIER")
 
 # ------------------------------------------------------------------------------
-# SLIDE 5 : DESCRIPTION DU JEU DE DONNÉES (4 KPI en haut + 2 cartes en bas)
+# SLIDE 5 : DESCRIPTION DU JEU DE DONNÉES (4 KPI + 2 Blocs)
 # ------------------------------------------------------------------------------
 s5 = prs.slides.add_slide(blank_layout)
 add_slide_header(s5, "Description du Jeu de Données FinScope", "2. ANALYSE EXPLORATOIRE (EDA)", 5)
 
 kpis_s5 = [
-    ("23 524", "Observations", "Échantillon consolidé"),
-    ("4 Pays", "Afrique de l'Est", "Kenya, Rwanda, TZ, UG"),
+    ("23 524", "Observations", "Échantillon officiel consolidé"),
+    ("4 Pays", "Afrique de l'Est", "Kenya, Rwanda, Tanzanie, Ouganda"),
     ("13", "Variables", "2 numériques, 7 qualitatives"),
-    ("2016-2018", "Période d'Enquête", "Données Zindi Africa")
+    ("2016-2018", "Période d'Enquête", "Enquêtes FinScope (Zindi)")
 ]
-
 for i, (v, lbl, sub) in enumerate(kpis_s5):
     add_kpi_card(s5, Inches(0.8 + i * 2.95), Inches(1.75), Inches(2.85), Inches(1.5), v, lbl, sub)
 
 s5_num = [
-    ("Âge de l'individu :", "Variable continue s'étendant de 16 à 100 ans (médiane : 35 ans)."),
-    ("Taille du ménage :", "Nombre de personnes résidant sous le même toit : 1 à 21 (médiane : 3 personnes)."),
-    ("Année d'enquête :", "Année de réalisation de l'enquête FinScope (2016, 2017 ou 2018 selon le pays).")
+    ("Âge :", "Variable continue de 16 à 100 ans (médiane : 35 ans)."),
+    ("Taille du ménage :", "De 1 à 21 résidents (médiane : 3 membres)."),
+    ("Année :", "Année de réalisation de l'enquête (2016 à 2018 selon le pays).")
 ]
-add_content_card(s5, Inches(0.8), Inches(3.45), Inches(5.7), Inches(3.3), "Variables Numériques & Temporelles", s5_num, tag="DISTRIBUTIONS QUANTITATIVES")
+add_concise_card(s5, Inches(0.8), Inches(3.45), Inches(5.7), Inches(3.3), "Variables Numériques", s5_num, tag="DONNÉES QUANTITATIVES")
 
 s5_cat = [
-    ("Socio-démographie :", "Genre, statut matrimonial, relation au chef de ménage."),
-    ("Capital humain & Emploi :", "Niveau d'instruction (6 catégories), secteur d'activité / profession."),
-    ("Environnement & Équipement :", "Milieu de résidence (Rural / Urban) et possession d'un téléphone mobile personnel.")
+    ("Démographie :", "Genre, statut matrimonial, relation au chef de ménage."),
+    ("Capital humain :", "Niveau d'instruction (6 paliers), catégorie professionnelle."),
+    ("Milieu & Équipement :", "Zone rurale/urbaine, possession d'un téléphone mobile.")
 ]
-add_content_card(s5, Inches(6.8), Inches(3.45), Inches(5.7), Inches(3.3), "Variables Catégorielles Déterminantes", s5_cat, tag="PROFILS SOCIO-ÉCONOMIQUES")
+add_concise_card(s5, Inches(6.8), Inches(3.45), Inches(5.7), Inches(3.3), "Variables Catégorielles", s5_cat, tag="PROFILS QUALITATIFS")
 
 # ------------------------------------------------------------------------------
-# SLIDE 6 : AUDIT DE QUALITÉ DES DONNÉES (2 Cartes)
+# SLIDE 6 : AUDIT QUALITÉ ET DÉCISION DOUBLONS (2 Grandes cartes)
 # ------------------------------------------------------------------------------
 s6 = prs.slides.add_slide(blank_layout)
-add_slide_header(s6, "Audit de la Qualité et Intégrité des Données", "2. ANALYSE EXPLORATOIRE (EDA)", 6)
+add_slide_header(s6, "Audit de Qualité et Décisions d'Ingénierie", "2. ANALYSE EXPLORATOIRE (EDA)", 6)
 
 s6_left = [
-    ("Exhaustivité parfaite :", "Zéro valeur manquante sur l'ensemble des 23 524 lignes et 13 colonnes (100 % de complétude)."),
-    ("Cohérence des types :", "Aucune incohérence de format détectée ; les valeurs numériques et catégorielles sont rigoureusement valides."),
-    ("Rôle de l'identifiant (uniqueid) :", "L'identifiant n'est pas unique à l'échelle globale, mais uniquement par pays."),
-    ("Traitement d'ingénierie :", "La colonne uniqueid a été retirée du pipeline d'apprentissage pour éliminer tout risque d'apprentissage par cœur arbitraire.")
+    ("Complétude 100 % :", "Zéro valeur manquante sur les 23 524 lignes et 13 colonnes."),
+    ("Cohérence des types :", "Aucune incohérence de format ni valeur aberrante."),
+    ("Rôle de uniqueid :", "Identifiant local non unique globalement (spécifique au pays)."),
+    ("Action d'ingénierie :", "Exclusion de uniqueid pour éviter tout surapprentissage arbitraire.")
 ]
-add_content_card(s6, Inches(0.8), Inches(1.75), Inches(5.7), Inches(5.0), "Complétude & Cohérence Globale", s6_left, tag="AUDIT D'INTÉGRITÉ")
+add_concise_card(s6, Inches(0.8), Inches(1.75), Inches(5.7), Inches(5.0), "Complétude & Intégrité des Données", s6_left, tag="AUDIT D'INTÉGRITÉ")
 
 s6_right = [
-    ("Constat initial :", "4 429 lignes partagent des combinaisons de variables socio-démographiques exactement identiques."),
-    ("Vérification approfondie :", "Le croisement avec uniqueid prouve qu'il s'agit d'individus différents partageant des caractéristiques similaires (ex. 2 agriculteurs ruraux de 40 ans sans instruction)."),
-    ("Décision méthodologique :", "Conservation intégrale des 4 429 observations."),
-    ("Justification :", "Supprimer ces lignes aurait faussé la distribution réelle de la population en sous-représentant les profils démographiques les plus fréquents.")
+    ("Constat :", "4 429 observations partagent un profil socio-démographique identique."),
+    ("Analyse rigoureuse :", "Le croisement avec uniqueid prouve qu'il s'agit d'individus réels distincts interrogés lors de l'enquête."),
+    ("Décision retenue :", "Conservation intégrale des 4 429 lignes."),
+    ("Raison scientifique :", "Préserver fidèlement la distribution et la densité démographique réelle de la population étudiée.")
 ]
-add_content_card(s6, Inches(6.8), Inches(1.75), Inches(5.7), Inches(5.0), "Traitement des Profils Identiques", s6_right, tag="DÉCISION MÉTHODOLOGIQUE CLÉ")
+add_concise_card(s6, Inches(6.8), Inches(1.75), Inches(5.7), Inches(5.0), "Gestion des Profils Identiques (4 429 lignes)", s6_right, tag="DÉCISION MÉTHODOLOGIQUE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 7 : DÉSÉQUILIBRE DE CLASSES (3 KPI en haut + 1 Grande carte en bas)
+# SLIDE 7 : DÉSÉQUILIBRE DE CLASSES (AVEC SCHÉMA DE PROPORTION VISUEL)
 # ------------------------------------------------------------------------------
 s7 = prs.slides.add_slide(blank_layout)
 add_slide_header(s7, "Distribution de la Cible et Déséquilibre de Classes", "2. ANALYSE EXPLORATOIRE (EDA)", 7)
 
-kpis_s7 = [
-    ("85,92 %", "Non Bancarisés (No)", "20 212 répondants dans l'échantillon"),
-    ("14,08 %", "Bancarisés (Yes)", "3 312 répondants dans l'échantillon"),
-    ("6,1 : 1", "Ratio de Déséquilibre", "6 non bancarisés pour 1 bancarisé")
-]
+# 3 Cartes KPI
+add_kpi_card(s7, Inches(0.8), Inches(1.75), Inches(3.75), Inches(1.4), "85,92 %", "Non Bancarisés (No)", "20 212 individus (Classe majoritaire)", val_color=COLOR_NAVY)
+add_kpi_card(s7, Inches(4.75), Inches(1.75), Inches(3.75), Inches(1.4), "14,08 %", "Bancarisés (Yes)", "3 312 individus (Classe cible)", val_color=COLOR_BLUE_LINE)
+add_kpi_card(s7, Inches(8.7), Inches(1.75), Inches(3.8), Inches(1.4), "6,1 pour 1", "Ratio de Déséquilibre", "Forte asymétrie statistique", val_color=COLOR_BLUE_ACCENT)
 
-for i, (v, lbl, sub) in enumerate(kpis_s7):
-    add_kpi_card(s7, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(1.6), v, lbl, sub,
-                 val_color=COLOR_NAVY if i == 0 else (COLOR_BLUE_LINE if i == 1 else COLOR_BLUE_ACCENT))
+# SCHÉMA VISUEL : BARRE PROPORTIONNELLE
+schema_box = add_card(s7, Inches(0.8), Inches(3.3), Inches(11.7), Inches(1.3), bg_color=COLOR_WHITE, border_color=COLOR_CARD_BORDER)
+
+# Titre du schéma
+stb = s7.shapes.add_textbox(Inches(1.0), Inches(3.4), Inches(11.3), Inches(0.3))
+stf = stb.text_frame
+stf.margin_top = stf.margin_left = stf.margin_bottom = stf.margin_right = 0
+sp = stf.paragraphs[0]
+sp.text = "RÉPARTITION VISUELLE DE L'ÉCHANTILLON (23 524 RÉPONDANTS)"
+sp.font.name = FONT_HEADING
+sp.font.size = Pt(9.5)
+sp.font.bold = True
+sp.font.color.rgb = COLOR_TEXT_MUTED
+
+# Barre 85.92% (Non bancarisés)
+bar_width_total = 11.3
+bar_w_no = bar_width_total * 0.8592
+bar_w_yes = bar_width_total * 0.1408
+
+b_no = s7.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(1.0), Inches(3.8), Inches(bar_w_no), Inches(0.55))
+b_no.fill.solid()
+b_no.fill.fore_color.rgb = COLOR_NAVY
+b_no.line.fill.background()
+tf_no = b_no.text_frame
+tf_no.word_wrap = True
+p_bno = tf_no.paragraphs[0]
+p_bno.text = "NON BANCARISÉS : 85,9 % (20 212)"
+p_bno.font.name = FONT_HEADING
+p_bno.font.size = Pt(11)
+p_bno.font.bold = True
+p_bno.font.color.rgb = COLOR_WHITE
+p_bno.alignment = PP_ALIGN.CENTER
+
+# Barre 14.08% (Bancarisés)
+b_yes = s7.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(1.0 + bar_w_no), Inches(3.8), Inches(bar_w_yes), Inches(0.55))
+b_yes.fill.solid()
+b_yes.fill.fore_color.rgb = COLOR_BLUE_LINE
+b_yes.line.fill.background()
+tf_yes = b_yes.text_frame
+tf_yes.word_wrap = True
+p_byes = tf_yes.paragraphs[0]
+p_byes.text = "14,1 %"
+p_byes.font.name = FONT_HEADING
+p_byes.font.size = Pt(11)
+p_byes.font.bold = True
+p_byes.font.color.rgb = COLOR_WHITE
+p_byes.alignment = PP_ALIGN.CENTER
 
 s7_bottom = [
-    ("Piège de l'Accuracy brute :", "Un prédicteur constant qui répondrait systématiquement 'No' obtiendrait une exactitude artificielle de 85,92 % tout en étant parfaitement inutile sur le plan métier."),
-    ("Sélection de métriques robustes :", "Priorité stricte accordée au ROC-AUC (mesure du pouvoir séparateur global des probabilités) et au F1-Score sur la classe minoritaire 'Yes'."),
-    ("Stratégie algorithmique :", "Introduction de pénalités de déséquilibre (scale_pos_weight = 6.1) pour forcer les modèles à accorder une importance équivalente aux profils bancarisés."),
-    ("Calibration du seuil :", "Optimisation du seuil de décision au-delà de 0,50 pour équilibrer précisément précision et rappel.")
+    ("Piège de l'Accuracy :", "Un prédicteur constant 'No' obtiendrait 85,9 % sans rien apprendre."),
+    ("Métriques obligatoires :", "Priorité stricte au ROC-AUC et au F1-Score sur la classe minoritaire 'Yes'."),
+    ("Ajustements d'apprentissage :", "Pondération scale_pos_weight = 6.1 et recalibration du seuil de décision.")
 ]
-add_content_card(s7, Inches(0.8), Inches(3.55), Inches(11.7), Inches(3.2), "Implications Méthodologiques Majeures", s7_bottom, tag="STRATÉGIE DE MODÉLISATION")
+add_concise_card(s7, Inches(0.8), Inches(4.75), Inches(11.7), Inches(2.1), "Conséquences Méthodologiques Directes", s7_bottom, tag="STRATÉGIE ALGORITHMIQUE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 8 : FACTEURS DISCRIMINANTS (Grille 2x2)
+# SLIDE 8 : FACTEURS DISCRIMINANTS (AVEC SCHÉMA GRAPHIQUE HORIZONTAL CRAMÉR'S V)
 # ------------------------------------------------------------------------------
 s8 = prs.slides.add_slide(blank_layout)
-add_slide_header(s8, "Principaux Enseignements Statistiques", "2. ANALYSE EXPLORATOIRE (EDA)", 8)
+add_slide_header(s8, "Facteurs Clés d'Inclusion (Mesures d'Association)", "2. ANALYSE EXPLORATOIRE (EDA)", 8)
 
-s8_items = [
-    ("Niveau d'Instruction", [
-        ("Cramér's V = 0,392 :", "Déterminant statistique numéro 1 de l'inclusion financière."),
-        ("Gradient spectaculaire :", "Le taux de bancarisation passe de 4 % chez les personnes sans éducation formelle à plus de 57 % au niveau universitaire.")
-    ], "DÉTERMINANT #1"),
-    ("Type d'Activité & Emploi", [
-        ("Cramér's V = 0,361 :", "Déterminant majeur lié à la régularité des flux de revenus."),
-        ("Contraste formel / informel :", "77 % de bancarisation chez les fonctionnaires et 54 % dans le privé formel, contre < 8 % dans l'agriculture vivrière.")
-    ], "DÉTERMINANT #2"),
-    ("Téléphone Mobile", [
-        ("Cramér's V = 0,208 :", "Condition sine qua non d'accès aux services financiers modernes."),
-        ("Écart marqué :", "18 % de bancarisation chez les détenteurs de téléphone contre à peine 2 % chez ceux qui n'en possèdent pas.")
-    ], "INFRASTRUCTURE"),
-    ("Âge & Territoire", [
-        ("Dynamique d'âge :", "Relation non linéaire en cloche : l'accès bancaire culmine sur la tranche 35-44 ans (18,2 %) avant de redescendre."),
-        ("Disparités géographiques :", "Le Kenya domine largement (25 % de bancarisation), suivi du Rwanda (11 %), de la Tanzanie (9 %) et de l'Ouganda (9 %).")
-    ], "DÉMOGRAPHIE")
+# Schéma comparatif de Cramér's V
+schema_v = add_card(s8, Inches(0.8), Inches(1.75), Inches(6.8), Inches(5.0), bg_color=COLOR_WHITE, border_color=COLOR_CARD_BORDER)
+
+vtb = s8.shapes.add_textbox(Inches(1.05), Inches(1.95), Inches(6.3), Inches(0.4))
+vtf = vtb.text_frame
+vtf.margin_top = vtf.margin_left = vtf.margin_bottom = vtf.margin_right = 0
+vp = vtf.paragraphs[0]
+vp.text = "HIÉRARCHIE DES DÉTERMINANTS (V DE CRAMÉR)"
+vp.font.name = FONT_HEADING
+vp.font.size = Pt(10)
+vp.font.bold = True
+vp.font.color.rgb = COLOR_BLUE_ACCENT
+
+# Barres horizontales pour Cramér's V
+factors = [
+    ("Niveau d'instruction", 0.392, "4 % sans instruction -> 57 % supérieur"),
+    ("Type d'emploi / activité", 0.361, "77 % fonctionnaires vs <8 % agriculture"),
+    ("Téléphone portable", 0.208, "18 % avec téléphone vs 2 % sans"),
+    ("Milieu de résidence", 0.119, "Urbain 25 % vs Rural 10 %")
 ]
 
-for idx, (title, bullets, tag) in enumerate(s8_items):
-    r = idx // 2
-    c = idx % 2
-    add_content_card(s8, Inches(0.8 + c * 5.95), Inches(1.75 + r * 2.5), Inches(5.75), Inches(2.3), title, bullets, tag=tag)
+max_bar_w = 4.2  # inches
+for i, (fname, fval, fcomment) in enumerate(factors):
+    by = Inches(2.45 + i * 1.0)
+    
+    # Label
+    ltb = s8.shapes.add_textbox(Inches(1.05), by, Inches(2.2), Inches(0.4))
+    ltf = ltb.text_frame
+    ltf.margin_top = ltf.margin_left = ltf.margin_bottom = ltf.margin_right = 0
+    lp = ltf.paragraphs[0]
+    lp.text = fname
+    lp.font.name = FONT_HEADING
+    lp.font.size = Pt(10.5)
+    lp.font.bold = True
+    lp.font.color.rgb = COLOR_NAVY
+    
+    # Barre
+    w = max_bar_w * (fval / 0.40)
+    bar = s8.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.3), by + Inches(0.02), Inches(w), Inches(0.28))
+    bar.fill.solid()
+    bar.fill.fore_color.rgb = COLOR_BLUE_LINE if i == 0 else (COLOR_BLUE_ACCENT if i == 1 else COLOR_NAVY)
+    bar.line.fill.background()
+    
+    # Valeur
+    val_tb = s8.shapes.add_textbox(Inches(3.35 + w), by, Inches(1.1), Inches(0.3))
+    vtf2 = val_tb.text_frame
+    vtf2.margin_top = vtf2.margin_left = vtf2.margin_bottom = vtf2.margin_right = 0
+    vp2 = vtf2.paragraphs[0]
+    vp2.text = f"V = {fval:.3f}"
+    vp2.font.name = FONT_HEADING
+    vp2.font.size = Pt(10)
+    vp2.font.bold = True
+    vp2.font.color.rgb = COLOR_NAVY
+
+    # Commentaire sous la barre
+    ctb = s8.shapes.add_textbox(Inches(3.3), by + Inches(0.33), Inches(4.0), Inches(0.3))
+    ctf = ctb.text_frame
+    ctf.margin_top = ctf.margin_left = ctf.margin_bottom = ctf.margin_right = 0
+    cp = ctf.paragraphs[0]
+    cp.text = fcomment
+    cp.font.name = FONT_BODY
+    cp.font.size = Pt(9)
+    cp.font.color.rgb = COLOR_TEXT_MUTED
+
+# 2 Blocs d'informations complémentaires à droite
+s8_age = [
+    ("Courbe en cloche :", "Taux minimal chez les jeunes (16-24 ans : 7 %)."),
+    ("Pic d'inclusion :", "Culmine entre 35 et 44 ans à 18,2 %."),
+    ("Séniors :", "Baisse progressive au-delà de 65 ans.")
+]
+add_concise_card(s8, Inches(7.8), Inches(1.75), Inches(4.7), Inches(2.4), "Dynamique selon l'Âge", s8_age, tag="RELATION NON LINÉAIRE")
+
+s8_pays = [
+    ("Kenya :", "Taux le plus élevé (25 %) grâce à l'écosystème fintech."),
+    ("Rwanda :", "Taux intermédiaire (11 %)."),
+    ("Tanzanie & Ouganda :", "Faible bancarisation formelle (~9 %).")
+]
+add_concise_card(s8, Inches(7.8), Inches(4.35), Inches(4.7), Inches(2.4), "Disparités Géographiques", s8_pays, tag="ANALYSE TERRITORIALE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 9 : PRÉTRAITEMENT ET FEATURE ENGINEERING (3 Blocs séquentiels)
+# SLIDE 9 : PIPELINE DE PRÉTRAITEMENT (AVEC SCHÉMA FLOWCHART 4 ÉTAPES)
 # ------------------------------------------------------------------------------
 s9 = prs.slides.add_slide(blank_layout)
 add_slide_header(s9, "Pipeline de Prétraitement et Feature Engineering", "3. MODÉLISATION", 9)
 
-s9_steps = [
-    ("1. Nettoyage & Filtrage", [
-        ("Exclusion uniqueid :", "Élimination des identifiants non généralisables."),
-        ("Encodage de la cible :", "Transformation binaire propre de bank_account ('Yes' -> 1, 'No' -> 0)."),
-        ("Validation des formats :", "Contrôle des types stricts sous Pandas pour éviter toute incohérence.")
-    ], "ÉTAPE 1"),
-    ("2. ColumnTransformer Scikit-Learn", [
-        ("StandardScaler :", "Centrage et réduction des variables numériques (âge, taille du ménage, année)."),
-        ("OneHotEncoder :", "Encodage disjonctif complet des variables qualitatives avec handle_unknown='ignore'."),
-        ("Sécurité leakage :", "Ajustement exclusif sur les données d'entraînement (fit sur train uniquement).")
-    ], "ÉTAPE 2"),
-    ("3. Partitionnement Stratifié", [
-        ("Répartition 80 / 20 :", "18 819 individus pour l'entraînement, 4 705 pour le test indépendant."),
-        ("Stratification stricte :", "Préservation exacte du ratio de 14,08 % de bancarisés dans les deux partitions."),
-        ("Validation croisée :", "5-Fold Stratified K-Fold pour la sélection et le réglage des seuils.")
-    ], "ÉTAPE 3")
+# SCHÉMA DU WORKFLOW EN 4 BLOCS RELIÉS PAR DES FLÈCHES
+flow_steps = [
+    ("1. Données Brutes", "FinScope Survey\n• 23 524 lignes\n• 13 colonnes\n• Format tabulaire", COLOR_CARD_BG, COLOR_CARD_BORDER),
+    ("2. Nettoyage", "Filtrage strict\n• Drop uniqueid\n• Cible binaire (0/1)\n• Typage Pandas", COLOR_CARD_BG, COLOR_CARD_BORDER),
+    ("3. Transformations", "ColumnTransformer\n• StandardScaler (Âge, Ménage)\n• OneHot (7 catégories)", COLOR_BLUE_SOFT, COLOR_BLUE_BORDER),
+    ("4. Partitionnement", "Split Stratifié 80/20\n• Train : 18 819 (14,1 %)\n• Test : 4 705 (14,1 %)\n• 5-Fold Stratified CV", COLOR_CARD_BG, COLOR_CARD_BORDER)
 ]
 
-for i, (title, items, tag) in enumerate(s9_steps):
-    add_content_card(s9, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(5.0), title, items, tag=tag)
+bw = Inches(2.45)
+bh = Inches(3.2)
+arrow_w = Inches(0.4)
+
+for i, (stitle, sbody, sbg, sbord) in enumerate(flow_steps):
+    bx = Inches(0.8 + i * (2.45 + 0.55))
+    by = Inches(1.75)
+    
+    # Carte étape
+    card = s9.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, bx, by, bw, bh)
+    card.fill.solid()
+    card.fill.fore_color.rgb = sbg
+    card.line.color.rgb = sbord
+    card.line.width = Pt(1)
+    
+    tb = s9.shapes.add_textbox(bx + Inches(0.2), by + Inches(0.2), bw - Inches(0.4), bh - Inches(0.4))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.margin_top = tf.margin_left = tf.margin_bottom = tf.margin_right = 0
+    
+    p1 = tf.paragraphs[0]
+    p1.text = stitle
+    p1.font.name = FONT_HEADING
+    p1.font.size = Pt(12)
+    p1.font.bold = True
+    p1.font.color.rgb = COLOR_NAVY
+    p1.space_after = Pt(8)
+    
+    for line in sbody.split("\n"):
+        p = tf.add_paragraph()
+        p.text = line
+        p.font.name = FONT_BODY
+        p.font.size = Pt(10)
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
+        p.space_after = Pt(3)
+        
+    # Flèche de liaison vers le bloc suivant
+    if i < 3:
+        ax = bx + bw + Inches(0.08)
+        ay = by + Inches(1.4)
+        arrow = s9.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, ax, ay, Inches(0.38), Inches(0.25))
+        arrow.fill.solid()
+        arrow.fill.fore_color.rgb = COLOR_BLUE_LINE
+        arrow.line.fill.background()
+
+# Encart inférieur : Garantie méthodologique
+s9_sec = [
+    ("Ajustement exclusif sur Train :", "Le ColumnTransformer est ajusté (fit) uniquement sur la partition d'entraînement."),
+    ("Élimination du Data Leakage :", "Aucune information issue du jeu de test n'est contaminée lors du centrage ou de l'encodage."),
+    ("Reproductibilité totale :", "Graine aléatoire fixée (random_state=42) sur l'ensemble du pipeline.")
+]
+add_concise_card(s9, Inches(0.8), Inches(5.15), Inches(11.7), Inches(1.7), "Garantie d'Étanchéité et Absence de Fuite de Données", s9_sec, tag="RIGUEUR SCIENTIFIQUE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 10 : STRATÉGIE DE MODÉLISATION (4 Cartes 2x2)
+# SLIDE 10 : STRATÉGIE DE MODÉLISATION (4 Cartes 2x2 très aérées)
 # ------------------------------------------------------------------------------
 s10 = prs.slides.add_slide(blank_layout)
 add_slide_header(s10, "Stratégie de Modélisation et Algorithmes Évalués", "3. MODÉLISATION", 10)
 
 s10_algos = [
     ("Régression Logistique", [
-        ("Famille :", "Modèle linéaire probabiliste."),
-        ("Rôle :", "Sert de référence de base (Baseline)."),
-        ("Points forts :", "Calcul instantané, interprétabilité directe des coefficients en odds-ratios."),
-        ("Limites :", "Incapacité à capturer nativement les interactions non linéaires complexes.")
-    ], "BASELINE"),
-    ("Forêt Aléatoire (Random Forest)", [
-        ("Famille :", "Ensemble par ensachage d'arbres (Bagging)."),
-        ("Rôle :", "Capture des relations non linéaires et réduction de variance."),
-        ("Points forts :", "Robustesse face au bruit statistique, absence d'hypothèse de linéarité."),
-        ("Limites :", "Taille mémoire importante et temps d'inférence modéré.")
+        ("Famille :", "Modèle linéaire probabiliste de référence (Baseline)."),
+        ("Atout :", "Interprétabilité directe des coefficients en odds-ratios."),
+        ("Limite :", "Ne capture pas nativement les non-linéarités complexes.")
+    ], "BASELINE LINÉAIRE"),
+    ("Random Forest", [
+        ("Famille :", "Ensemble d'arbres décisionnels par ensachage (Bagging)."),
+        ("Atout :", "Réduction de variance, robuste aux valeurs aberrantes."),
+        ("Limite :", "Empreinte mémoire importante et coût d'inférence supérieur.")
     ], "BAGGING"),
     ("LightGBM", [
         ("Famille :", "Gradient Boosting leaf-wise sur histogrammes."),
-        ("Rôle :", "Compétiteur moderne haute performance."),
-        ("Points forts :", "Vitesse d'entraînement remarquable, faible empreinte mémoire."),
-        ("Limites :", "Sensibilité au surapprentissage sur les petits sous-échantillons.")
+        ("Atout :", "Entraînement ultra-rapide et faible consommation mémoire."),
+        ("Limite :", "Sensibilité au surapprentissage sur données déséquilibrées.")
     ], "BOOSTING RAPIDE"),
     ("XGBoost", [
-        ("Famille :", "Gradient Boosting avec régularisation L1 et L2."),
-        ("Rôle :", "Algorithme de pointe pour données tabulaires."),
-        ("Points forts :", "Excellente gestion du déséquilibre (scale_pos_weight) et généralisation optimale."),
-        ("Limites :", "Réglage fin des hyperparamètres nécessaire.")
+        ("Famille :", "Gradient Boosting régularisé (L1/L2) de pointe."),
+        ("Atout :", "Gestion native du déséquilibre via scale_pos_weight."),
+        ("Limite :", "Nécessite un calibrage fin des hyperparamètres.")
     ], "BOOSTING RÉGULARISÉ")
 ]
 
 for idx, (title, items, tag) in enumerate(s10_algos):
     r = idx // 2
     c = idx % 2
-    add_content_card(s10, Inches(0.8 + c * 5.95), Inches(1.75 + r * 2.5), Inches(5.75), Inches(2.3), title, items, tag=tag)
+    add_concise_card(s10, Inches(0.8 + c * 5.95), Inches(1.75 + r * 2.5), Inches(5.75), Inches(2.3), title, items, tag=tag)
 
 # ------------------------------------------------------------------------------
-# SLIDE 11 : BENCHMARK COMPARATIF (Tableau élégant + 3 KPI de synthèse)
+# SLIDE 11 : BENCHMARK COMPARATIF DES MODÈLES (Tableau + 3 Badges KPI)
 # ------------------------------------------------------------------------------
 s11 = prs.slides.add_slide(blank_layout)
 add_slide_header(s11, "Benchmark Comparatif des Performances (Test Set)", "3. MODÉLISATION", 11)
 
-# Tableau moderne
 rows, cols = 5, 7
 left, top, width, height = Inches(0.8), Inches(1.75), Inches(11.7), Inches(2.7)
 table_shape = s11.shapes.add_table(rows, cols, left, top, width, height)
 tbl = table_shape.table
 
-headers = ["Algorithme", "Accuracy", "Précision", "Rappel", "F1-Score", "ROC-AUC", "Seuil Optimal"]
+headers = ["Modèle Évalué", "Accuracy", "Précision", "Rappel", "F1-Score", "ROC-AUC", "Seuil Optimal"]
 tbl_data = [
     ["Régression Logistique", "85,70 %", "49,35 %", "62,69 %", "0,5522", "0,8646", "0,65"],
     ["Random Forest", "85,55 %", "48,95 %", "63,60 %", "0,5532", "0,8702", "0,62"],
@@ -624,7 +732,7 @@ for col_idx, h in enumerate(headers):
     cell.text = h
     for p in cell.text_frame.paragraphs:
         p.font.name = FONT_HEADING
-        p.font.size = Pt(12)
+        p.font.size = Pt(11.5)
         p.font.bold = True
         p.font.color.rgb = COLOR_WHITE
         p.alignment = PP_ALIGN.CENTER if col_idx > 0 else PP_ALIGN.LEFT
@@ -638,111 +746,249 @@ for row_idx, row in enumerate(tbl_data):
         cell.text = val
         for p in cell.text_frame.paragraphs:
             p.font.name = FONT_BODY
-            p.font.size = Pt(12)
+            p.font.size = Pt(11.5)
             p.font.bold = is_winner
             p.font.color.rgb = COLOR_BLUE_ACCENT if is_winner else COLOR_TEXT_PRIMARY
             p.alignment = PP_ALIGN.CENTER if col_idx > 0 else PP_ALIGN.LEFT
 
-# 3 Cartes de synthèse sous le tableau
-kpi_b11 = [
-    ("0,8767", "Meilleur ROC-AUC", "XGBoost domine le pouvoir discriminant global"),
-    ("0,5641", "Meilleur F1-Score", "Équilibre maximal entre précision et rappel"),
-    ("0,68", "Seuil Optimal", "Optimisé par cross-validation à 5 plis sur train")
+kpis_s11 = [
+    ("0,8767", "Meilleur ROC-AUC", "XGBoost maximise la séparation probabiliste"),
+    ("0,5641", "Meilleur F1-Score", "Équilibre supérieur précision / rappel"),
+    ("0,68", "Seuil Optimal", "Calibré par validation croisée à 5 plis sur train")
 ]
 
-for i, (v, lbl, sub) in enumerate(kpi_b11):
+for i, (v, lbl, sub) in enumerate(kpis_s11):
     add_kpi_card(s11, Inches(0.8 + i * 3.95), Inches(4.75), Inches(3.75), Inches(1.9), v, lbl, sub,
                  val_color=COLOR_BLUE_LINE if i == 0 else COLOR_BLUE_ACCENT)
 
 # ------------------------------------------------------------------------------
-# SLIDE 12 : SÉLECTION DU MODÈLE FINAL (Colonne gauche KPI + Colonne droite)
+# SLIDE 12 : SÉLECTION DU MODÈLE FINAL ET SEUIL (KPIs + Carte décisionnelle)
 # ------------------------------------------------------------------------------
 s12 = prs.slides.add_slide(blank_layout)
 add_slide_header(s12, "Sélection Finale du Modèle XGBoost", "3. MODÉLISATION", 12)
 
-# Colonne gauche : 3 métriques clés
-add_kpi_card(s12, Inches(0.8), Inches(1.75), Inches(4.0), Inches(1.55), "0,8767", "Score ROC-AUC", "Séparation probabiliste optimale")
+add_kpi_card(s12, Inches(0.8), Inches(1.75), Inches(4.0), Inches(1.55), "0,8767", "Score ROC-AUC", "Discrimination probabiliste maximale")
 add_kpi_card(s12, Inches(0.8), Inches(3.45), Inches(4.0), Inches(1.55), "0,5641", "Score F1 Minoritaire", "Seuil de décision calibré à 0,68")
 add_kpi_card(s12, Inches(0.8), Inches(5.15), Inches(4.0), Inches(1.55), "60,12 %", "Taux de Rappel", "Détection de 6 bancarisés réels sur 10")
 
-s12_right = [
-    ("Excellence du compromis métrique :", "XGBoost délivre le meilleur score F1 (0,5641) tout en conservant une précision de 53,14 % et un rappel de 60,12 % sur l'échantillon test indépendant."),
-    ("Robustesse prouvée par régularisation :", "L'application des pénalités L2 et le sous-échantillonnage préviennent tout surapprentissage sur les profils d'enquêtes marginaux."),
-    ("Rôle clé du seuil optimisé (0,68) :", "Le seuil standard à 0,50 générait un excès de faux positifs. Le seuil à 0,68 calibré par validation croisée garantit que seules les opportunités qualifiées sont ciblées."),
-    ("Sérialisation pour la production :", "Pipeline complet sérialisé dans models/best_model.joblib et métriques archivées dans models/metrics.json.")
+s12_justif = [
+    ("Pouvoir discriminant n°1 :", "ROC-AUC de 0,8767 garantissant un ordonnancement optimal des probabilités individuelles."),
+    ("Équilibre Précision / Rappel :", "53,14 % de précision pour 60,12 % de rappel sur le jeu test indépendant."),
+    ("Régularisation pénalisée :", "Résistance éprouvée au bruit statistique limitant fortement tout risque de surapprentissage."),
+    ("Rôle du seuil à 0,68 :", "Réduit de 38 % les faux positifs par rapport au seuil naïf de 0,50."),
+    ("Artefacts de production :", "Pipeline sérialisé sous models/best_model.joblib et métriques sous models/metrics.json.")
 ]
-add_content_card(s12, Inches(5.1), Inches(1.75), Inches(7.4), Inches(4.95), "Justification Décisionnelle & Exportation", s12_right, tag="CHOIX FINAL & ARTEFACTS")
+add_concise_card(s12, Inches(5.1), Inches(1.75), Inches(7.4), Inches(4.95), "Justification Décisionnelle & Industrialisation", s12_justif, tag="VALIDATION & EXPORT")
 
 # ------------------------------------------------------------------------------
-# SLIDE 13 : ARCHITECTURE DE DÉPLOIEMENT (3 Blocs techniques verticaux)
+# SLIDE 13 : ARCHITECTURE TECHNIQUE GLOBALE (AVEC SCHÉMA D'ARCHITECTURE EN COUCHES)
 # ------------------------------------------------------------------------------
 s13 = prs.slides.add_slide(blank_layout)
 add_slide_header(s13, "Architecture Technique de Déploiement Full-Stack", "4. DÉPLOIEMENT & MLOPS", 13)
 
-s13_cards = [
-    ("Moteur REST FastAPI", [
-        ("Framework moderne :", "API Python asynchrone haute performance."),
-        ("Validation Pydantic :", "Typage strict et contrôle d'intégrité des entrées."),
-        ("Rapidité d'inférence :", "Temps de réponse moyen < 15 ms par requête."),
-        ("Points de terminaison :", "/api/predict, /api/metrics, /api/stats, /api/retrain.")
-    ], "BACKEND INFERENCE"),
-    ("Interface Web React + Vite", [
-        ("Technologies :", "React 18, Vite, TypeScript et Tailwind CSS."),
-        ("Jauge dynamique SVG :", "Animation semi-circulaire intuitive du score de bancarisation."),
-        ("Dashboards analytiques :", "Graphiques interactifs Recharts reproduisant l'EDA."),
-        ("Expérience fluide :", "Simulation instantanée et responsive multi-écrans.")
-    ], "FRONTEND INTERACTIF"),
-    ("Conteneurisation Cloud", [
-        ("Multi-Stage Docker :", "Étape 1 : compilation TypeScript (Node 22) -> Étape 2 : image de production Python 3.12-slim."),
-        ("Optimisation image :", "Empreinte minimale intégrant Uvicorn et libgomp1."),
-        ("Orchestration locale :", "docker-compose up pour exécution reproductible."),
-        ("Hébergement Render :", "Déploiement cloud avec HTTPS actif et redémarrage automatique.")
-    ], "DEVOPS & CLOUD")
+# SCHÉMA D'ARCHITECTURE CONTENEURISÉE
+# Cadre global Docker
+docker_box = add_card(s13, Inches(0.8), Inches(1.75), Inches(11.7), Inches(3.6), bg_color=COLOR_WHITE, border_color=COLOR_BLUE_LINE)
+
+dtb = s13.shapes.add_textbox(Inches(1.0), Inches(1.85), Inches(11.3), Inches(0.35))
+dtf = dtb.text_frame
+dtf.margin_top = dtf.margin_left = dtf.margin_bottom = dtf.margin_right = 0
+dp = dtf.paragraphs[0]
+dp.text = "ENVIRONNEMENT DE PRODUCTION CONTENEURISÉ (DOCKER SUR RENDER CLOUD • HTTPS)"
+dp.font.name = FONT_HEADING
+dp.font.size = Pt(9.5)
+dp.font.bold = True
+dp.font.color.rgb = COLOR_BLUE_LINE
+
+# 4 Blocs horizontaux connectés
+arch_nodes = [
+    ("Navigateur Client", "Utilisateur final\n• Ordinateur / Mobile\n• Saisie des 13 variables\n• Consultation jauge SVG", Inches(1.1), Inches(2.3), Inches(2.4)),
+    ("Frontend React", "Interface SPA\n• Vite + TypeScript\n• Tailwind CSS\n• Dashboards Recharts", Inches(3.95), Inches(2.3), Inches(2.4)),
+    ("Backend FastAPI", "Moteur REST\n• Validation Pydantic\n• Inférence < 15 ms\n• Endpoints /predict, /retrain", Inches(6.8), Inches(2.3), Inches(2.4)),
+    ("Pipeline XGBoost", "Inférence Machine Learning\n• ColumnTransformer\n• Modèle .joblib chargé\n• Verdict & Probabilités", Inches(9.65), Inches(2.3), Inches(2.4))
 ]
 
-for i, (title, items, tag) in enumerate(s13_cards):
-    add_content_card(s13, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(5.0), title, items, tag=tag)
+for name, desc, nx, ny, nw in arch_nodes:
+    card = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, nx, ny, nw, Inches(2.75))
+    card.fill.solid()
+    card.fill.fore_color.rgb = COLOR_CARD_BG
+    card.line.color.rgb = COLOR_CARD_BORDER
+    card.line.width = Pt(1)
+
+    tb = s13.shapes.add_textbox(nx + Inches(0.15), ny + Inches(0.15), nw - Inches(0.3), Inches(2.45))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.margin_top = tf.margin_left = tf.margin_bottom = tf.margin_right = 0
+
+    p_t = tf.paragraphs[0]
+    p_t.text = name
+    p_t.font.name = FONT_HEADING
+    p_t.font.size = Pt(11)
+    p_t.font.bold = True
+    p_t.font.color.rgb = COLOR_NAVY
+    p_t.space_after = Pt(6)
+
+    for line in desc.split("\n"):
+        p = tf.add_paragraph()
+        p.text = line
+        p.font.name = FONT_BODY
+        p.font.size = Pt(9.5)
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
+        p.space_after = Pt(2)
+
+# Flèches de communication bidirectionnelle
+for ax in [Inches(3.52), Inches(6.37), Inches(9.22)]:
+    arrow = s13.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, ax, Inches(3.4), Inches(0.4), Inches(0.2))
+    arrow.fill.solid()
+    arrow.fill.fore_color.rgb = COLOR_BLUE_LINE
+    arrow.line.fill.background()
+
+# Bandeau de synthèse architecturale
+s13_points = [
+    ("Build Multi-Stage :", "Étape 1 Node 22 (compilation frontend) -> Étape 2 Python 3.12-slim ultra-légère."),
+    ("Reproductibilité :", "Exécution locale ou cloud identique en une commande via docker-compose up."),
+    ("Haute Performance :", "Temps de réponse d'inférence < 15 ms avec typage Pydantic asynchrone.")
+]
+add_concise_card(s13, Inches(0.8), Inches(5.5), Inches(11.7), Inches(1.4), "Garanties d'Architecture & Performance", s13_points, tag="INGÉNIERIE LOGICIELLE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 14 : MLOPS ET RÉENTRAÎNEMENT (3 Cartes processus)
+# SLIDE 14 : MLOPS ET RÉENTRAÎNEMENT (AVEC SCHÉMA DE BOUCLE DE FEEDBACK)
 # ------------------------------------------------------------------------------
 s14 = prs.slides.add_slide(blank_layout)
 add_slide_header(s14, "Pipeline de Réentraînement Automatique (MLOps)", "4. DÉPLOIEMENT & MLOPS", 14)
 
-s14_cards = [
-    ("Pipeline Dédié (src/retrain.py)", [
-        ("Objectif central :", "Prévenir la dérive des données (Data Drift) et la dérive de concept (Concept Drift) face aux nouvelles enquêtes."),
-        ("Traitement bout-en-bout :", "Rechargement des données, ré-étalonnage du ColumnTransformer et réentraînement du modèle."),
-        ("Traçabilité continue :", "Journalisation systématique dans retraining.log avec date, version et scores obtenus.")
-    ], "AUTOMATISATION"),
-    ("Quality Gate de Sécurité", [
-        ("Garde-fou automatisé :", "Déploiement conditionné à un score de performance strict : ROC-AUC >= 0,75."),
-        ("Protection de la production :", "Si le nouveau modèle sous-performe, l'ancien modèle est immédiatement maintenu sans interruption."),
-        ("Auditabilité totale :", "Conservation des métriques comparées avant/après chaque cycle.")
-    ], "CONTRÔLE QUALITÉ"),
-    ("Modes d'Exécution Flexibles", [
-        ("Tâche planifiée locale :", "Script Cron (scripts/retrain_cron.sh) pour exécution périodique autonome."),
-        ("Webhook API sécurisé :", "Endpoint POST /api/retrain pour intégration avec orchestrateurs externes (ex. Airflow)."),
-        ("Rechargement à chaud :", "Mise à jour en mémoire vive sans nécessiter de redémarrage du serveur Uvicorn.")
-    ], "OPÉRABILITÉ")
-]
+# SCHÉMA DE LA BOUCLE DE RÉENTRAÎNEMENT ET QUALITY GATE
+loop_box = add_card(s14, Inches(0.8), Inches(1.75), Inches(11.7), Inches(3.3), bg_color=COLOR_WHITE, border_color=COLOR_CARD_BORDER)
 
-for i, (title, items, tag) in enumerate(s14_cards):
-    add_content_card(s14, Inches(0.8 + i * 3.95), Inches(1.75), Inches(3.75), Inches(5.0), title, items, tag=tag)
+ltb = s14.shapes.add_textbox(Inches(1.0), Inches(1.9), Inches(11.3), Inches(0.3))
+ltf = ltb.text_frame
+ltf.margin_top = ltf.margin_left = ltf.margin_bottom = ltf.margin_right = 0
+lp = ltf.paragraphs[0]
+lp.text = "BOUCLE DE FEEDBACK MLOPS & CONTRÔLE QUALITÉ AUTOMATISÉ"
+lp.font.name = FONT_HEADING
+lp.font.size = Pt(9.5)
+lp.font.bold = True
+lp.font.color.rgb = COLOR_BLUE_ACCENT
+
+# Bloc 1 : Données
+b1 = s14.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.1), Inches(2.4), Inches(2.4), Inches(2.3))
+b1.fill.solid()
+b1.fill.fore_color.rgb = COLOR_CARD_BG
+b1.line.color.rgb = COLOR_CARD_BORDER
+tf1 = b1.text_frame
+tf1.word_wrap = True
+tf1.margin_top = tf1.margin_left = tf1.margin_bottom = tf1.margin_right = 0
+p = tf1.paragraphs[0]
+p.text = "1. Nouvelles Données\n\n• Enquêtes actualisées\n• Dérive surveillée\n• Ingestion automatisée"
+p.font.name = FONT_BODY
+p.font.size = Pt(10)
+p.font.color.rgb = COLOR_NAVY
+
+# Flèche 1
+arr1 = s14.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(3.55), Inches(3.3), Inches(0.35), Inches(0.2))
+arr1.fill.solid()
+arr1.fill.fore_color.rgb = COLOR_BLUE_LINE
+arr1.line.fill.background()
+
+# Bloc 2 : Script Retrain
+b2 = s14.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.95), Inches(2.4), Inches(2.4), Inches(2.3))
+b2.fill.solid()
+b2.fill.fore_color.rgb = COLOR_CARD_BG
+b2.line.color.rgb = COLOR_CARD_BORDER
+tf2 = b2.text_frame
+tf2.word_wrap = True
+tf2.margin_top = tf2.margin_left = tf2.margin_bottom = tf2.margin_right = 0
+p = tf2.paragraphs[0]
+p.text = "2. Script src/retrain.py\n\n• Ré-étalonnage ColumnTransformer\n• Réentraînement XGBoost\n• Calcul métriques CV"
+p.font.name = FONT_BODY
+p.font.size = Pt(10)
+p.font.color.rgb = COLOR_NAVY
+
+# Flèche 2
+arr2 = s14.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(6.4), Inches(3.3), Inches(0.35), Inches(0.2))
+arr2.fill.solid()
+arr2.fill.fore_color.rgb = COLOR_BLUE_LINE
+arr2.line.fill.background()
+
+# Bloc 3 : Quality Gate (Décision)
+b3 = s14.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(6.8), Inches(2.4), Inches(2.5), Inches(2.3))
+b3.fill.solid()
+b3.fill.fore_color.rgb = COLOR_BLUE_SOFT
+b3.line.color.rgb = COLOR_BLUE_BORDER
+tf3 = b3.text_frame
+tf3.word_wrap = True
+tf3.margin_top = tf3.margin_left = tf3.margin_bottom = tf3.margin_right = 0
+p = tf3.paragraphs[0]
+p.text = "3. Quality Gate\n\nROC-AUC >= 0,75 ?\n\n• Condition de déploiement\n• Sécurité opérationnelle"
+p.font.name = FONT_BODY
+p.font.size = Pt(10)
+p.font.color.rgb = COLOR_NAVY
+
+# Flèche vers succès
+arr3 = s14.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(9.35), Inches(2.8), Inches(0.35), Inches(0.18))
+arr3.fill.solid()
+arr3.fill.fore_color.rgb = COLOR_SUCCESS_TEXT
+arr3.line.fill.background()
+
+# Bloc Succès
+b_ok = s14.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.75), Inches(2.4), Inches(2.5), Inches(1.05))
+b_ok.fill.solid()
+b_ok.fill.fore_color.rgb = COLOR_SUCCESS_BG
+b_ok.line.color.rgb = COLOR_SUCCESS_BORDER
+tf_ok = b_ok.text_frame
+tf_ok.word_wrap = True
+tf_ok.margin_top = tf_ok.margin_left = tf_ok.margin_bottom = tf_ok.margin_right = 0
+p = tf_ok.paragraphs[0]
+p.text = "OUI : Déploiement\n• Hot-reload en mémoire\n• 0 temps d'arrêt"
+p.font.name = FONT_BODY
+p.font.size = Pt(9.5)
+p.font.color.rgb = COLOR_SUCCESS_TEXT
+
+# Flèche vers échec
+arr4 = s14.shapes.add_shape(MSO_SHAPE.RIGHT_ARROW, Inches(9.35), Inches(3.9), Inches(0.35), Inches(0.18))
+arr4.fill.solid()
+arr4.fill.fore_color.rgb = COLOR_DANGER_TEXT
+arr4.line.fill.background()
+
+# Bloc Rejet
+b_no = s14.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.75), Inches(3.6), Inches(2.5), Inches(1.05))
+b_no.fill.solid()
+b_no.fill.fore_color.rgb = COLOR_DANGER_BG
+b_no.line.color.rgb = COLOR_DANGER_BORDER
+tf_no = b_no.text_frame
+tf_no.word_wrap = True
+tf_no.margin_top = tf_no.margin_left = tf_no.margin_bottom = tf_no.margin_right = 0
+p = tf_no.paragraphs[0]
+p.text = "NON : Rollback\n• Maintien modèle actif\n• Alerte retraining.log"
+p.font.name = FONT_BODY
+p.font.size = Pt(9.5)
+p.font.color.rgb = COLOR_DANGER_TEXT
+
+# 2 Cartes de modes d'exécution en bas
+s14_cron = [
+    ("Tâche planifiée locale :", "Exécution hebdomadaire autonome via scripts/retrain_cron.sh."),
+    ("Auditabilité :", "Horodatage et scores historisés dans retraining.log.")
+]
+add_concise_card(s14, Inches(0.8), Inches(5.2), Inches(5.7), Inches(1.7), "Mode Planifié (Cron Job)", s14_cron, tag="AUTOMATISATION LOCALE")
+
+s14_api = [
+    ("Déclenchement distant :", "Requête sécurisée POST /api/retrain (intégration CI/CD / Airflow)."),
+    ("Rechargement à chaud :", "Remplacement immédiat des poids sans coupure de trafic.")
+]
+add_concise_card(s14, Inches(6.8), Inches(5.2), Inches(5.7), Inches(1.7), "Mode Webhook REST (API)", s14_api, tag="ORCHESTRATION DISTANTE")
 
 # ------------------------------------------------------------------------------
-# SLIDE 15 : DÉMONSTRATION EN PRODUCTION (Carte URL + 3 Cartes fonctionnalités)
+# SLIDE 15 : DÉMONSTRATION EN PRODUCTION (URL + 3 Cartes interactives)
 # ------------------------------------------------------------------------------
 s15 = prs.slides.add_slide(blank_layout)
 add_slide_header(s15, "Démonstration de l'Application en Production", "5. DÉMONSTRATION", 15)
 
-# Bannière supérieure URL en ligne
 banner = add_card(s15, Inches(0.8), Inches(1.75), Inches(11.7), Inches(1.1), bg_color=COLOR_BLUE_SOFT, border_color=COLOR_BLUE_BORDER)
 btb = s15.shapes.add_textbox(Inches(1.0), Inches(1.85), Inches(11.3), Inches(0.9))
 btf = btb.text_frame
 btf.word_wrap = True
 bp1 = btf.paragraphs[0]
-bp1.text = "APPLICATION EN LIGNE • STATUT OPÉRATIONNEL SUR RENDER CLOUD"
+bp1.text = "APPLICATION OPÉRATIONNELLE EN LIGNE • HÉBERGÉE SUR RENDER CLOUD"
 bp1.font.name = FONT_HEADING
 bp1.font.size = Pt(9.5)
 bp1.font.bold = True
@@ -758,24 +1004,24 @@ bp2.font.color.rgb = COLOR_NAVY
 
 s15_features = [
     ("Simulateur Prédictif", [
-        ("Saisie ergonomique :", "Formulaire complet reprenant l'ensemble des 13 variables individuelles."),
-        ("Verdict en temps réel :", "Animation semi-circulaire de la jauge et décision binaire instantanée."),
-        ("Interprétation :", "Présentation claire de la probabilité de bancarisation estimée.")
+        ("Saisie instantanée :", "Formulaire complet reprenant les 13 variables du modèle."),
+        ("Jauge semi-circulaire :", "Animation SVG interactive du score calculé."),
+        ("Verdict immédiat :", "Affichage clair du statut (Bancarisé / Non bancarisé).")
     ], "SIMULATION"),
-    ("Tableau de Bord EDA", [
-        ("Analyses graphiques :", "Visualisations interactives des taux d'inclusion par nation."),
-        ("Croisements sociologiques :", "Distribution selon le niveau d'instruction et la catégorie professionnelle."),
-        ("Accès immédiat :", "Consultation directe des insights sans prérequis technique.")
+    ("Tableaux de Bord EDA", [
+        ("Exploration visuelle :", "Graphiques interactifs des taux par pays et niveau d'étude."),
+        ("Croisements sociologiques :", "Distribution selon le secteur professionnel."),
+        ("Compréhension directe :", "Insights majeurs accessibles aux non-techniciens.")
     ], "VISUALISATION"),
     ("Monitoring & Retraining", [
-        ("Métriques officielles :", "Affichage en direct du ROC-AUC, du F1-Score et du seuil retenu (0,68)."),
-        ("Déclenchement réentraînement :", "Bouton d'actualisation connecté à l'API de réentraînement."),
-        ("Transparence :", "Matrice de confusion et statut de déploiement en direct.")
+        ("Métriques officielles :", "Affichage direct du ROC-AUC, du F1 et du seuil (0,68)."),
+        ("Déclenchement direct :", "Bouton d'actualisation connecté à l'API de réentraînement."),
+        ("Transparence totale :", "Statut de déploiement et logs vérifiables en ligne.")
     ], "SUPERVISION")
 ]
 
 for i, (title, items, tag) in enumerate(s15_features):
-    add_content_card(s15, Inches(0.8 + i * 3.95), Inches(3.1), Inches(3.75), Inches(3.65), title, items, tag=tag)
+    add_concise_card(s15, Inches(0.8 + i * 3.95), Inches(3.1), Inches(3.75), Inches(3.65), title, items, tag=tag)
 
 # ------------------------------------------------------------------------------
 # SLIDE 16 : LIMITES, PERSPECTIVES ET CONCLUSION
@@ -783,21 +1029,21 @@ for i, (title, items, tag) in enumerate(s15_features):
 s16 = prs.slides.add_slide(blank_layout)
 add_slide_header(s16, "Limites, Perspectives et Conclusion", "6. CONCLUSION", 16)
 
-s16_left = [
-    ("Données purement déclaratives :", "Les enquêtes FinScope reposent sur les déclarations des ménages (biais de mémorisation ou d'approbation sociale)."),
-    ("Revenu qualitatif :", "La variable de source de revenu ne quantifie pas le montant monétaire précis des flux financiers."),
-    ("Décalage temporel entre pays :", "Les enquêtes nationales ont été collectées entre 2016 et 2018 selon les nations.")
+s16_lim = [
+    ("Données déclaratives :", "Enquêtes FinScope basées sur les déclarations des ménages."),
+    ("Revenu qualitatif :", "Absence de montants monétaires précis dans les variables."),
+    ("Synchronisation :", "Enquêtes nationales étalées de 2016 à 2018 selon les pays.")
 ]
-add_content_card(s16, Inches(0.8), Inches(1.75), Inches(5.7), Inches(3.3), "Limites Méthodologiques Identifiées", s16_left, tag="LUCIDITÉ SCIENTIFIQUE")
+add_concise_card(s16, Inches(0.8), Inches(1.75), Inches(5.7), Inches(3.3), "Limites Méthodologiques Identifiées", s16_lim, tag="LUCIDITÉ SCIENTIFIQUE")
 
-s16_right = [
-    ("Flux transactionnels Mobile Money :", "Coupler les enquêtes avec les métriques réelles d'usage (ex. volumes M-Pesa, fréquence des transferts)."),
-    ("Explicabilité locale (SHAP) :", "Intégrer les valeurs de Shapley pour justifier chaque score prédictif individuel auprès du client."),
-    ("Données géospatiales :", "Intégrer la distance physique aux agences bancaires et aux points de retrait d'argent.")
+s16_persp = [
+    ("Transactions Mobile Money :", "Couplage avec les volumes réels de flux (M-Pesa, MTN)."),
+    ("Explicabilité locale SHAP :", "Justification des prédictions individuelles par valeurs de Shapley."),
+    ("Données géospatiales :", "Intégration de la distance aux points de retrait et agences.")
 ]
-add_content_card(s16, Inches(6.8), Inches(1.75), Inches(5.7), Inches(3.3), "Perspectives d'Amélioration Future", s16_right, tag="ÉVOLUTIONS")
+add_concise_card(s16, Inches(6.8), Inches(1.75), Inches(5.7), Inches(3.3), "Perspectives d'Amélioration", s16_persp, tag="ÉVOLUTIONS")
 
-# Bannière de conclusion générale
+# Bandeau de conclusion générale
 banner_c = add_card(s16, Inches(0.8), Inches(5.25), Inches(11.7), Inches(1.5), bg_color=COLOR_BLUE_SOFT, border_color=COLOR_BLUE_BORDER)
 ctb = s16.shapes.add_textbox(Inches(1.05), Inches(5.35), Inches(11.2), Inches(1.3))
 ctf = ctb.text_frame
@@ -814,8 +1060,8 @@ cp1.space_after = Pt(2)
 cp2 = ctf.add_paragraph()
 cp2.text = (
     "Couverture complète du cycle de vie de la Science des Données : de l'audit exploratoire rigoureux "
-    "à l'entraînement comparatif et la sélection d'un modèle XGBoost régularisé (ROC-AUC 0,8767, F1 0,5641), "
-    "aboutissant à une application conteneurisée déployée en production avec surveillance et réentraînement automatisé."
+    "à la sélection d'un modèle XGBoost régularisé (ROC-AUC 0,8767, F1 0,5641), aboutissant à une application "
+    "conteneurisée déployée en production avec surveillance et réentraînement automatisé."
 )
 cp2.font.name = FONT_BODY
 cp2.font.size = Pt(11)
@@ -824,4 +1070,4 @@ cp2.font.color.rgb = COLOR_NAVY
 # Sauvegarde
 output_pptx = "Presentation_Soutenance.pptx"
 prs.save(output_pptx)
-print(f"Présentation générée avec succès : {output_pptx} ({len(prs.slides)} slides)")
+print(f"Présentation avec schémas générée avec succès : {output_pptx} ({len(prs.slides)} slides)")
