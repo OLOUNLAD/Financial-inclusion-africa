@@ -50,3 +50,4 @@ frontend/dist/
 
 # Captures du navigateur de test
 .playwright-mcp/
+.~lock.*#
